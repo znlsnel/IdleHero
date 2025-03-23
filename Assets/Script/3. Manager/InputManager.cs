@@ -10,56 +10,40 @@ public enum EPlayerInput
 	LeftMouse
 }
 
-public class InputManager : Singleton<InputManager>
+[System.Serializable]
+public class InputManager : IManager
 {
+	[SerializeField] private InputActionAsset inputSystem; 
 	private Dictionary<EPlayerInput, InputAction> playerInputs = new Dictionary<EPlayerInput, InputAction>();
-
-	private KeyCode[] numKeyCodes = {
-		KeyCode.Alpha1,
-		KeyCode.Alpha2,
-		KeyCode.Alpha3,
-		KeyCode.Alpha4,
-		KeyCode.Alpha5,
-		KeyCode.Alpha6,
-		KeyCode.Alpha7,
-		KeyCode.Alpha8,
-	};
-
-	[Header("Input Action Assets")]
-	[SerializeField] private InputActionAsset inputSystem;
-
 
 	// Input Action Map  
 	private InputActionMap playerInputMap;
 	 
 
 	// === Input Actions ===
-	public static event Action<int> inputNumber; 
-	public static InputAction GetInput(EPlayerInput type) => Instance.playerInputs[type];  
-    
-	private bool[] numKeyDown;
-	 
-	private void OnValidate()
-	{ 
-        BindAction(typeof(EPlayerInput));  
-	}
+	public event Action<int> inputNumber; 
+	public InputAction GetInput(EPlayerInput type) => playerInputs[type];  
 
-	protected override void Awake()
-	{
-		base.Awake();
+    public void Init()
+    {
+        BindAction(typeof(EPlayerInput));
+    }
 
-		BindAction(typeof(EPlayerInput));  
-		SetActive(false);
 
-		numKeyDown = new bool[numKeyCodes.Length];
-	}
-
-	private void Update()
-	{
-		CheckInputNumber();
-	}
-
+    public void Clear()
+    {
+        
+    }
  
+	public void SetActive(bool active)
+	{ 
+		if (active)
+			inputSystem.Enable();
+		
+		else 
+			inputSystem.Disable(); 
+	}
+
 	private void BindAction(Type type)
 	{
 		string mapName = type.Name;
@@ -71,32 +55,5 @@ public class InputManager : Singleton<InputManager>
 			playerInputs[t] = playerInputMap.FindAction(type.ToString());
 	} 
 
-	public static void SetActive(bool active)
-	{ 
-		if (active)
-			Instance.inputSystem.Enable();
-		
-		else 
-			Instance.inputSystem.Disable(); 
-	}
 
-
-
-
-    private void CheckInputNumber()
-    {
-		for (int i = 0; i < numKeyCodes.Length; i++)
-		{
-			if (Input.GetKeyDown(numKeyCodes[i]) && !numKeyDown[i])
-			{
-				numKeyDown[i] = true;
-				inputNumber?.Invoke(i + 1);
-			}
-
-			if (Input.GetKeyUp(numKeyCodes[i]))
-			{
-				numKeyDown[i] = false;
-			}
-		}
-	}
 }
