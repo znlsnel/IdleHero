@@ -15,7 +15,7 @@ public interface IPoolable
 public class PoolManager : IManager
 {
 	#region Pool
-	class Pool
+	class Pool 
     {
         public GameObject Original { get; private set; }
         public Transform Root { get; set; }
@@ -49,7 +49,7 @@ public class PoolManager : IManager
 
             _poolStack.Push(obj);
         }
-
+ 
         public GameObject Pop(Transform parent)
         {
             GameObject obj;
@@ -96,7 +96,7 @@ public class PoolManager : IManager
         _pool.Add(original.name, pool);
     }
 
-    private void Push(GameObject obj)
+    private void Release(GameObject obj)
     {
         if (!obj.TryGetComponent(out IPoolable poolable))
             return;
@@ -110,7 +110,7 @@ public class PoolManager : IManager
 
         _pool[name].Push(obj);
     }
-
+ 
     public GameObject GetOriginal(string name)
     {
         if (_pool.ContainsKey(name) == false)
@@ -119,19 +119,19 @@ public class PoolManager : IManager
         return _pool[name].Original;
     }
 
-    public GameObject Pop(string prefabPath, Transform parent = null)
+    public GameObject Get(string prefabPath, Transform parent = null)
     {
         GameObject original = Managers.Resource.Load<GameObject>(prefabPath);
-        return Pop(original, parent); 
+        return Get(original, parent); 
     }
 
-    public GameObject Pop(GameObject original, Transform parent = null)
+    public GameObject Get(GameObject original, Transform parent = null)
     {
         if (_pool.ContainsKey(original.name) == false)
             CreatePool(original);
 
         GameObject obj = _pool[original.name].Pop(parent);
-        obj.GetComponent<IPoolable>().Initialize(obj => Push(obj));
+        obj.GetComponent<IPoolable>().Initialize(obj => Release(obj));
         return _pool[original.name].Pop(parent); 
     }
 }

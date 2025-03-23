@@ -43,11 +43,11 @@ public abstract class UI_Base : MonoBehaviour
 	protected Text GetText(int idx) { return Get<Text>(idx); }
 	protected Button GetButton(int idx) { return Get<Button>(idx); }
 	protected Image GetImage(int idx) { return Get<Image>(idx); }
-
+ 
 	public static void BindEvent(GameObject go, Action<PointerEventData> action, Define.UIEvent type = Define.UIEvent.Click)
 	{
-		UI_EventHandler evt = Util.GetOrAddComponent<UI_EventHandler>(go);
-
+		UI_EventHandler evt = go.GetOrAddComponent<UI_EventHandler>();
+  
 		switch (type)
 		{
 			case Define.UIEvent.Click:

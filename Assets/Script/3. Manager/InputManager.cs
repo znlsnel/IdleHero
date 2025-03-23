@@ -13,7 +13,7 @@ public enum EPlayerInput
 [System.Serializable]
 public class InputManager : IManager
 {
-	[SerializeField] private InputActionAsset inputSystem; 
+	[SerializeField] private InputActionAsset inputActionAsset; 
 	private Dictionary<EPlayerInput, InputAction> playerInputs = new Dictionary<EPlayerInput, InputAction>();
 
 	// Input Action Map  
@@ -21,7 +21,6 @@ public class InputManager : IManager
 	 
 
 	// === Input Actions ===
-	public event Action<int> inputNumber; 
 	public InputAction GetInput(EPlayerInput type) => playerInputs[type];  
 
     public void Init()
@@ -38,19 +37,22 @@ public class InputManager : IManager
 	public void SetActive(bool active)
 	{ 
 		if (active)
-			inputSystem.Enable();
+			inputActionAsset.Enable();
 		
 		else 
-			inputSystem.Disable(); 
+			inputActionAsset.Disable(); 
 	}
 
 	private void BindAction(Type type)
 	{
+		if (inputActionAsset == null)
+			return; 
+
 		string mapName = type.Name;
 		if (mapName[0] == 'E')
 			mapName = mapName.Substring(1);
 
-		playerInputMap = inputSystem.FindActionMap(mapName);
+		playerInputMap = inputActionAsset.FindActionMap(mapName);
 		foreach (EPlayerInput t in Enum.GetValues(type))
 			playerInputs[t] = playerInputMap.FindAction(type.ToString());
 	} 
