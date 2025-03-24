@@ -1,0 +1,218 @@
+{
+  "Items": [
+    {
+      "key": 1001,
+      "Name": "Warrior",
+      "Description": "공격속도가 느려지는 대신 강한 힘을 얻습니다",
+      "Stat": [
+        1,
+        2
+      ],
+      "StatValue": [
+        20,
+        -10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Warrior"
+    },
+    {
+      "key": 1002,
+      "Name": "Assassin",
+      "Description": "빠른 공격속도와 빠른 이동속도를 얻습니다",
+      "Stat": [
+        2,
+        3
+      ],
+      "StatValue": [
+        10,
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Assassin"
+    },
+    {
+      "key": 1003,
+      "Name": "Ranger",
+      "Description": "공격 범위가 증가합니다",
+      "Stat": [
+        8
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Ranger"
+    },
+    {
+      "key": 1004,
+      "Name": "BlessingOfAether",
+      "Description": "마나를 회복률이 증가합니다",
+      "Stat": [
+        4
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "BlessingOfAether"
+    },
+    {
+      "key": 1005,
+      "Name": "BlessingOfAgility",
+      "Description": "공격 회피율이 증가합니다",
+      "Stat": [
+        6
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "BlessingOfAgility"
+    },
+    {
+      "key": 1006,
+      "Name": "BootsFocus",
+      "Description": "빠른 이동속도를 얻습니다",
+      "Stat": [
+        3
+      ],
+      "StatValue": [
+        20
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "BootsFocus"
+    },
+    {
+      "key": 1007,
+      "Name": "Darkmage",
+      "Description": "플레이어 주변을 도는 검은 구체를 생성합니다",
+      "Stat": [
+        0
+      ],
+      "StatValue": [
+        0
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Darkmage"
+    },
+    {
+      "key": 1008,
+      "Name": "FlameBurst",
+      "Description": "몬스터 공격시 불꽃이 생성되며 주변 몬스터들에게 데미지를 줍니다",
+      "Stat": [
+        0
+      ],
+      "StatValue": [
+        0
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "FlameBurst"
+    },
+    {
+      "key": 1009,
+      "Name": "Gladiator",
+      "Description": "방어력이 증가합니다",
+      "Stat": [
+        7
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Gladiator"
+    },
+    {
+      "key": 1010,
+      "Name": "Paladin",
+      "Description": "팔라딘의 망치가 플레이어 주변을 돌아다며 공격합니다",
+      "Stat": [
+        0
+      ],
+      "StatValue": [
+        0
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Paladin"
+    },
+    {
+      "key": 1011,
+      "Name": "Priest",
+      "Description": "체력을 회복률이 증가합니다",
+      "Stat": [
+        5
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Priest"
+    },
+    {
+      "key": 1012,
+      "Name": "Sorcerer",
+      "Description": "플레이어의 공격이 전기를 터트립니다",
+      "Stat": [
+        0
+      ],
+      "StatValue": [
+        0
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Sorcerer"
+    },
+    {
+      "key": 1013,
+      "Name": "Sword",
+      "Description": "치명타 확률이 오릅니다",
+      "Stat": [
+        9
+      ],
+      "StatValue": [
+        10
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Sword"
+    },
+    {
+      "key": 1014,
+      "Name": "Wizard",
+      "Description": "공격시 30%의 메테오가 발사됩니다",
+      "Stat": [
+        0
+      ],
+      "StatValue": [
+        0
+      ],
+      "EffectPrefab": [
+        "None"
+      ],
+      "Image": "Wizard"
+    }
+  ]
+}

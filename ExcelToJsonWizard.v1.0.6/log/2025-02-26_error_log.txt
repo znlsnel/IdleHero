@@ -1,0 +1,15 @@
+2025-02-26 오후 8:49:10: Error converting value 'Heart' for variable 'Name' in sheet 'Sheet1' of file 'excel_files\ItemOption.xlsx': The given key 'Heart' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+2025-02-26 오후 8:49:10: Error processing sheet Sheet1 in file excel_files\ItemOption.xlsx: The given key 'Heart' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)
+2025-02-26 오후 8:49:11: Error processing sheet Sheet1 in file excel_files\ProjectileInfo.xlsx: Specified argument was out of the range of valid values. (Parameter 'index')
+   at System.Linq.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument)
+   at System.Linq.Enumerable.ElementAt[TSource](IEnumerable`1 source, Int32 index)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)
+2025-02-26 오후 8:51:22: Error processing sheet Sheet1 in file excel_files\ProjectileInfo.xlsx: Specified argument was out of the range of valid values. (Parameter 'index')
+   at System.Linq.ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument argument)
+   at System.Linq.Enumerable.ElementAt[TSource](IEnumerable`1 source, Int32 index)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)

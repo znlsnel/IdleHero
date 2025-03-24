@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class StageManager : IManager
+{
+    private HashSet<GameObject> _monsters = new HashSet<GameObject>();
+
+
+    public void Init()
+    {
+             
+    }
+
+    public void Clear()
+    {
+
+    }
+
+    public void RegisterMonster(GameObject monster)
+    {
+        _monsters.Add(monster);
+    }
+
+    public void UnregisterMonster(GameObject monster)
+    {
+        _monsters.Remove(monster);
+        
+    }
+
+
+
+}

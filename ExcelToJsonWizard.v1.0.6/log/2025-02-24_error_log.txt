@@ -1,0 +1,15 @@
+2025-02-24 오후 8:54:51: Empty values detected in file 'excel_files\ItemInfo.xlsx'. Default values were used.
+2025-02-24 오후 8:54:51: Error converting value 'AttackPerCoin' for variable 'Name' in sheet 'Sheet1' of file 'excel_files\ItemOption.xlsx': The given key 'AttackPerCoin' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+2025-02-24 오후 8:54:51: Error processing sheet Sheet1 in file excel_files\ItemOption.xlsx: The given key 'AttackPerCoin' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)
+2025-02-24 오후 8:58:53: Error converting value 'AttackPerCoin' for variable 'Name' in sheet 'Sheet1' of file 'excel_files\ItemOption.xlsx': The given key 'AttackPerCoin' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+2025-02-24 오후 8:58:53: Error processing sheet Sheet1 in file excel_files\ItemOption.xlsx: The given key 'AttackPerCoin' was not present in the dictionary.
+   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)

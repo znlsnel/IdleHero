@@ -10,23 +10,38 @@ public interface IManager
 
 public class Managers : Singleton<Managers>
 { 
+    [field: SerializeField] private DataManager data;
     [field: SerializeField] private InputManager input = new InputManager();
     [field: SerializeField] private ResourceManager resource = new ResourceManager();
     [field: SerializeField] private EventManager @event = new EventManager();
     [field: SerializeField] private SoundManager sound = new SoundManager();
     [field: SerializeField] private UIManager ui = new UIManager();
     [field: SerializeField] private PoolManager pool = new PoolManager();
- 
+    [field: SerializeField] private StageManager stage = new StageManager();
+    [field: SerializeField] private SkillManager skill = new SkillManager();
+      
+    public static DataManager Data => Instance.data;
     public static InputManager Input => Instance.input;
     public static ResourceManager Resource => Instance.resource;
-    public static EventManager Event => Instance.@event;
-    public static SoundManager Sound => Instance.sound;
+    public static EventManager Event => Instance.@event; 
+    public static SoundManager Sound => Instance.sound; 
     public static UIManager UI => Instance.ui;
     public static PoolManager Pool => Instance.pool; 
- 
+    public static StageManager Stage => Instance.stage;
+    public static SkillManager Skill => Instance.skill;
+
+    public static GameObject Player {get; private set;} = FindFirstObjectByType<PlayerController>().gameObject;
+    protected override void Awake()
+    {
+        base.Awake();
+        data = new DataManager();
+        Init();
+        
+    }
     private void Start()
     {
-        Init();
+        UI.ShowPopupUI<SkillPopupUI>("NewSkillPopup");
+        UI.ShowSceneUI<UI_Scene>("InGameUI");
 	}
 
     private void Update()
@@ -37,9 +52,13 @@ public class Managers : Singleton<Managers>
     private static void Init()
     {
 
-        // Instance.Input.Init();
-        // Instance.Resource.Init();
-        // Instance.Sound.Init();
+        Input.Init();
+        Resource.Init();
+        Sound.Init();
+        UI.Init();
+        Pool.Init();
+        Stage.Init();
+        Skill.Init();
         
 	}
 

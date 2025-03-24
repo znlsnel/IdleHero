@@ -1,0 +1,5 @@
+2024-11-20 오후 10:47:09: Error converting value 'Legendary' for variable 'Grade' in sheet 'Sheet1' of file 'excel_files\ItemInfo.xlsx': Unsupported data type: Enmu<Grade>
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+2024-11-20 오후 10:47:09: Error processing sheet Sheet1 in file excel_files\ItemInfo.xlsx: Unsupported data type: Enmu<Grade>
+   at ExcelToJsonWizard.Program.ConvertToType(String value, String type, String variableName, String logFilePath, String excelPath, String sheetName)
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)
