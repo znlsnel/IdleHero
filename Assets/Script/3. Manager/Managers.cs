@@ -42,8 +42,8 @@ public class Managers : Singleton<Managers>
     }
     private void Start()
     {
-        UI.ShowPopupUI<SkillPopupUI>();
-        UI.ShowSceneUI<GameSceneUI>();
+        //UI.ShowPopupUI<SkillPopupUI>(); 
+       
 	} 
 
     private void Update()

@@ -2,14 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Ricimi;
 using UnityEditor;
 using UnityEngine;
 
 [Serializable]
 public class UIManager : IManager
 {
-    [SerializeField] private GameObject _sceneUIParent; 
-    [SerializeField] private GameObject _popupUIParent; 
+    [SerializeField] private Transform _sceneUIParent; 
+    [SerializeField] private Transform _popupUIParent; 
 
     private int _order = 10;
 
@@ -17,9 +18,9 @@ public class UIManager : IManager
     private UI_Scene _sceneUI = null;
 
     public void Init()
-    {
-    
-    }
+    {        
+        ShowSceneUI<GameSceneUI>();
+    } 
   
     public void Clear()
     {

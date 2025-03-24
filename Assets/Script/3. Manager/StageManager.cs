@@ -11,8 +11,9 @@ public class StageManager : IManager
 
     public void Init()
     { 
-             
+        GameObject go = Managers.Pool.Get("Monster/Bat"); 
     }
+    
 
     public void Clear()
     {

@@ -3,40 +3,78 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Linq;
 using static DesignEnums;
+using System.Collections;
+using System.ComponentModel;
+
+
+
+
+[RequireComponent(typeof(PlayerAnimationHandler))]
 public class PlayerController : MonoBehaviour
 {
-    public PlayerStatHandler playerStatHandler { get; private set; } = new PlayerStatHandler();
+    [field: SerializeField] public PlayerStatHandler playerStatHandler { get; private set; } = new PlayerStatHandler();
+
+    // Component
+    public PlayerAnimationHandler animationHandler {get; private set;}
     private NavMeshAgent agent;
+
+    // Monster
     private List<GameObject> monsters;
     private GameObject currentTarget;
-    private float attackRange;
 
-    void Start()
+    public GameObject CurrentTarget => currentTarget;
+    public NavMeshAgent Agent => agent;
+    public float AttackRange => attackRange; 
+
+    // Stat
+    private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
+
+    // State
+    private IPlayerState currentState;
+    private Dictionary<PlayerStateType, IPlayerState> states;
+
+    private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        attackRange = playerStatHandler.GetStat(EStat.AttackRange);
+        animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>();
         FindMonsters();
+        
+        InitializeStates();
+        ChangeState(PlayerStateType.Idle);
     }
 
-    void Update()
+    private void InitializeStates()
     {
-        if (currentTarget == null || !currentTarget.activeInHierarchy)
+        states = new Dictionary<PlayerStateType, IPlayerState>
         {
-            FindNextTarget();
-        }
-        else
-        {
-            MoveToTarget();
-            CheckAndAttack();
-        }
+            { PlayerStateType.Idle, new IdleState(this) },
+            { PlayerStateType.Move, new MoveState(this) },
+            { PlayerStateType.Attack, new MonsterAttackState(this) },
+            { PlayerStateType.Death, new DeathState(this) }
+        };
     }
 
-    private void FindMonsters()
+    public void ChangeState(PlayerStateType newStateType)
     {
-        monsters = Managers.Stage.GetMonsters().ToList(); 
+        if (currentState != null)
+            currentState.Exit();
+
+        currentState = states[newStateType];
+        currentState.Enter();
     }
- 
-    private void FindNextTarget()
+
+    private void Update()
+    {
+        if (currentState != null)
+            currentState.Update();
+    }
+
+    public void FindMonsters()
+    {
+        monsters = Managers.Stage.GetMonsters().ToList();
+    }
+
+    public GameObject FindNextTarget()
     {
         currentTarget = null;
         float closestDistance = float.MaxValue;
@@ -53,28 +91,62 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+        return currentTarget;
     }
 
-    private void MoveToTarget()
+    public void MoveToTarget()
     {
         if (currentTarget != null)
         {
             agent.SetDestination(currentTarget.transform.position);
+            SetAnimationState(AnimState.Move);
         }
     }
 
-    private void CheckAndAttack()
+    public void RotateTowardsTarget(float rotationSpeed)
     {
-        float distanceToTarget = Vector3.Distance(transform.position, currentTarget.transform.position);
-        if (distanceToTarget <= attackRange)
+        if (currentTarget == null)
+            return;
+            
+        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        directionToTarget.y = 0;
+        
+        if (directionToTarget != Vector3.zero)
         {
-            Attack();
+            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+            float rotationAmount = rotationSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationAmount);
         }
     }
 
-    private void Attack()
+    public void SetAnimationState(AnimState state)
     {
-        // Implement attack logic here
-        Debug.Log("Player attacks the monster!");
+        animationHandler.SetIdleHash(false);
+        animationHandler.SetMoveHash(false);
+        animationHandler.SetAttackHash(false);
+        
+        switch (state)
+        {
+            case AnimState.Idle:
+                animationHandler.SetIdleHash(true);
+                break;
+            case AnimState.Move:
+                animationHandler.SetMoveHash(true);
+                break;
+            case AnimState.Attack:
+                animationHandler.SetAttackHash(true);
+                break;
+            case AnimState.Death:
+                animationHandler.SetDeathHash(true);
+                break;
+        }
     }
+
+    public void OnDeath()
+    {
+        ChangeState(PlayerStateType.Death);
+    }
+
 }
+
+

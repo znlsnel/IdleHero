@@ -4,23 +4,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using static DesignEnums;
 
+[Serializable]
 public class PlayerStatHandler
 {
     private Dictionary<SkillInfo, int> _skills = new Dictionary<SkillInfo, int>();
     private float[] stats;
 
     // 플레이어 기본 속성
-    private int _maxHealth;
-    private int _health;
-    private int _experience;
-    private int _maxExperience;
-    private int _coins; 
+    [SerializeField] private int _maxHealth;
+    [SerializeField] private int _health;
+    [SerializeField] private int _experience;
+    [SerializeField] private int _maxExperience;
+    [SerializeField] private int _coins; 
 
     public event Action OnCheangeValue;
 
     public PlayerStatHandler()
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
+        stats[(int)EStat.AttackRange] = 2f;
     }
   
     public void AddSkill(SkillInfo skill)
