@@ -30,19 +30,21 @@ public class Managers : Singleton<Managers>
     public static StageManager Stage => Instance.stage;
     public static SkillManager Skill => Instance.skill;
 
-    public static GameObject Player {get; private set;} = FindFirstObjectByType<PlayerController>().gameObject;
+    public static GameObject Player {get; private set;}
     protected override void Awake()
     {
         base.Awake();
+
+        Player = FindFirstObjectByType<PlayerController>().gameObject;
         data = new DataManager();
         Init();
         
     }
     private void Start()
     {
-        UI.ShowPopupUI<SkillPopupUI>("NewSkillPopup");
-        UI.ShowSceneUI<UI_Scene>("InGameUI");
-	}
+        UI.ShowPopupUI<SkillPopupUI>();
+        UI.ShowSceneUI<GameSceneUI>();
+	} 
 
     private void Update()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MonsterController : MonoBehaviour
 {
-    private void Start()
+    private void Awake()
     {
         Managers.Stage.RegisterMonster(gameObject); 
     }

@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 6227816632547497373}
   - component: {fileID: 5616323137638024176}
   m_Layer: 5
-  m_Name: NewSkillPopup
+  m_Name: SkillPopupUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

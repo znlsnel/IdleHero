@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 
-public class GameSceneUI : MonoBehaviour
+public class GameSceneUI : UI_Scene
 {
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider experienceSlider;
@@ -12,12 +12,10 @@ public class GameSceneUI : MonoBehaviour
 
     private PlayerStatHandler playerStatHandler;
 
-    void Awake()
-    {
-        playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatHandler;
-    }
+
     private void Start()
     {
+        playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatHandler;
         playerStatHandler = new PlayerStatHandler();
         playerStatHandler.OnCheangeValue += UpdateUI;
         UpdateUI();
@@ -28,7 +26,6 @@ public class GameSceneUI : MonoBehaviour
         playerStatHandler.OnCheangeValue -= UpdateUI;
     }
 
- 
     private void UpdateUI()
     {
         healthSlider.value = playerStatHandler.Health;
@@ -37,5 +34,4 @@ public class GameSceneUI : MonoBehaviour
         experienceSlider.maxValue = playerStatHandler.MaxExperience;
         coinsText.text = playerStatHandler.Coins.ToString();
     }
-
 }

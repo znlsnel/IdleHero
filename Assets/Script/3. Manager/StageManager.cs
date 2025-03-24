@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StageManager : IManager
 {
     private HashSet<GameObject> _monsters = new HashSet<GameObject>();
+    public GameObject[] GetMonsters()=> _monsters.ToArray();
 
 
     public void Init()
-    {
+    { 
              
     }
 
@@ -25,9 +27,7 @@ public class StageManager : IManager
     public void UnregisterMonster(GameObject monster)
     {
         _monsters.Remove(monster);
-        
     }
-
 
 
 }
