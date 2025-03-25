@@ -132,7 +132,7 @@ public class PoolManager : IManager
 
         GameObject obj = _pool[original.name].Pop(parent);
         obj.GetComponent<IPoolable>().Initialize(obj => Release(obj));
-        
-        return _pool[original.name].Pop(parent); 
+        // obj.SetActive(false); 
+        return obj;
     }
 }

@@ -70,20 +70,26 @@ public class DungeonGenerator : MonoBehaviour
         // 난간 설치 
         GenerateRailing(); 
  
-        // // 네비게이션 메쉬 베이크
-        navMeshSurface.layerMask = _navMeshLayer;    
-        navMeshSurface.BuildNavMesh();
-    
-
+        StartCoroutine(BakeNavMesh()); 
        // Managers.Player.GetComponent<NavMeshAgent>().SetDestination(_nodes[Random.Range(0, _nodes.Count)] + new Vector3(4, 0, 4)); 
-
-        Managers.Stage.SpawnMonster(); 
 
     }
 
+    private IEnumerator BakeNavMesh()
+    {
+        yield return new WaitForSeconds(0.1f);
+        navMeshSurface.layerMask = _navMeshLayer;    
+        navMeshSurface.BuildNavMesh();
+
+        NavMesh.AddNavMeshData(navMeshSurface.navMeshData);
+
+ 
+        Managers.Stage.SpawnMonster(); 
+
+    }
     public Vector3 GetRandomPosition()
     {
-        return _nodes[Random.Range(0, _nodes.Count)] * 8 + new Vector3(0, 0, 4);  
+        return _nodes[Random.Range(1, _nodes.Count)] * 8 + new Vector3(0, 0, 4);  
     }
 
     private void CreateNode()

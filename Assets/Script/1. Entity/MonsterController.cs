@@ -19,8 +19,7 @@ public abstract class BattleObject : MonoBehaviour
 }
 
 
-[RequireComponent(typeof(NavMeshAgent))]
-public class MonsterController : BattleObject
+public class MonsterController : BattleObject, IPoolable
 {
     // Animation Data
     private readonly static int moveHash = Animator.StringToHash("Move");
@@ -43,35 +42,31 @@ public class MonsterController : BattleObject
     private float AttackDamage => monsterSO.Damage;
     private float AttackDelay => monsterSO.AttackDelay; 
     private float DistanceToPlayer => Vector3.Distance(transform.position, player.transform.position);
-
+    public bool IsDead => isDead;
     // Values
     private MonsterState currentState = MonsterState.Idle;
     private float lastAttackTime;
     private float currentHealth;
     private bool isDead = false;
+
     // Event
     public Action<GameObject> onDie;
 
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>(); 
         animator = GetComponentInChildren<Animator>();
-        agent.enabled = false; 
-        Invoke(nameof(Init), 1f); 
-    }
-
-    #region  IPoolable
+    } 
 
     private void Update()
     {
-        if (agent.enabled && agent.isOnNavMesh)
+        if (agent.enabled)
             UpdateState(); 
           
     }
-
-    public void Init()
+    public void Init() 
     {
-        agent.enabled = true;
+        LocateNavMeshPosition();
         SetState(MonsterState.Idle); 
         currentHealth = monsterSO.MaxHealth;
         lastAttackTime = Time.time;
@@ -79,14 +74,37 @@ public class MonsterController : BattleObject
         agent.speed = MoveSpeed;  
     }
 
+    private void LocateNavMeshPosition()
+    {
+        if (NavMesh.SamplePosition(transform.position, out NavMeshHit hit, 10.0f, NavMesh.AllAreas))
+        {
+            transform.position = hit.position;
+            agent.enabled = true; 
+        }
+    }
+
+    #region  IPoolable
+
+    public void Initialize(Action<GameObject> returnAction)
+    {
+        onDie = returnAction;
+        Invoke(nameof(Init), 0.1f);
+    }
+
+    public void OnSpawn()
+    {
+        
+    }
+
     public void OnDespawn()
     {
-        onDie?.Invoke(gameObject); 
         animator.SetBool(deathHash, false);
-        Managers.Stage.UnregisterMonster(gameObject);  
+
+        onDie?.Invoke(gameObject);   
     } 
     
     #endregion
+    #region Animation Event
     public override void OnDamage(float damage)
     {
         if (currentState == MonsterState.Death)
@@ -102,8 +120,8 @@ public class MonsterController : BattleObject
     {
         
     }
- 
-    
+    #endregion
+    #region State
     private void UpdateState()
     {
         switch (currentState)
@@ -120,14 +138,14 @@ public class MonsterController : BattleObject
             case MonsterState.Death:
                 OnDeathState();
                 break;
-        }
+        } 
     }
     private void SetState(MonsterState newState)
     {
         currentState = newState;
-        agent.isStopped = currentState == MonsterState.Trace;
-        
-    }
+        agent.isStopped = currentState == MonsterState.Trace; 
+    }  
+
     private void OnIdleState()
     {
         // 추적이 가능하다면 추적 상태로 
@@ -184,8 +202,9 @@ public class MonsterController : BattleObject
         agent.isStopped = true;
         animator.SetBool(deathHash, true);
 
-        Invoke(nameof(OnDespawn), 3f); 
+        Invoke(nameof(OnDespawn), 1f); 
     }
+    #endregion
 
     private bool IsTracable(float distance)
     {
@@ -196,5 +215,6 @@ public class MonsterController : BattleObject
     {
         return Vector3.Distance(transform.position, player.transform.position) <= AttackRange;
     }
+
 
 }

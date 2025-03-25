@@ -6,6 +6,13 @@ using static DesignEnums;
 using System.Collections;
 using System.ComponentModel;
 
+public enum EPlayerState
+{
+    Idle,
+    Move,
+    Attack,
+    Death
+}
 
 
 
@@ -16,156 +23,154 @@ public class PlayerController : BattleObject
 
     // Component
     public PlayerAnimationHandler animationHandler {get; private set;}
+    private TargetSensorHandler targetSensorHandler;
     private NavMeshAgent agent;
 
     // Monster
     private List<GameObject> monsters;
-    public GameObject CurrentTarget {get; private set;}
-    public NavMeshAgent Agent => agent;
     public float AttackRange => attackRange; 
-    
-    private float currentHealth;
 
-    // Stat
+    // Values
+    private float currentHealth;
+    private GameObject currentTarget;
+
+
+    // Properties
+    private EPlayerState currentState = EPlayerState.Idle;
     private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
 
-    // State
-    private IPlayerState currentState;
-    private Dictionary<PlayerStateType, IPlayerState> states;
-
-    private void Start()
+    void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
-        animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>();
+        animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>(); 
+        targetSensorHandler = GetComponentInChildren<TargetSensorHandler>(); 
         currentHealth = playerStatHandler.MaxHealth;
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();  
+        agent.enabled = false;
+        Invoke(nameof(Init), 1.0f);  
+    } 
+
+    private void Init()
+    {
+        agent.enabled = true;
+    }
+
+    // Stat
+
+    public override void OnDamage(float damage)
+    {
         
-        FindMonsters();
-        InitializeStates();
-        ChangeState(PlayerStateType.Idle);
     }
-
-    private void InitializeStates()
+  
+    public override void OnAttack()
     {
-        states = new Dictionary<PlayerStateType, IPlayerState> 
-        {
-            { PlayerStateType.Idle, new IdleState(this) },
-            { PlayerStateType.Move, new MoveState(this) },
-            { PlayerStateType.Attack, new AttackState(this) },
-            { PlayerStateType.Death, new DeathState(this) }
-        };
-    }
-
-    public void ChangeState(PlayerStateType newStateType)
-    {
-        if (currentState != null)
-            currentState.Exit();
-
-        currentState = states[newStateType];
-        currentState.Enter();
+        foreach (var target in targetSensorHandler.OverlabTargets)
+        { 
+            target.GetComponent<BattleObject>()?.OnDamage(playerStatHandler.GetStat(EStat.Damage));
+        }
     }
 
     private void Update()
     {
-        if (currentState != null)
-            currentState.Update();
+        if (agent.enabled && agent.isOnNavMesh)
+            UpdateState();
+    } 
+    public void SetState(EPlayerState state)
+    {
+        currentState = state;
+        agent.isStopped = state == EPlayerState.Idle;
     }
 
-    public override void OnDamage(float damage)
+    public void UpdateState()
     {
-        if (currentHealth <= 0)
-            return;
-
-        currentHealth -= damage;
-        if (currentHealth <= 0)
+        switch(currentState)
         {
-            OnDeath();
-        } 
+            case EPlayerState.Idle:
+                OnIdleState();
+                break;
+            case EPlayerState.Move:
+                OnMoveState();
+                break;
+            case EPlayerState.Attack:
+                OnAttackState();
+                break;
+            case EPlayerState.Death:
+                OnDeathState();
+                break;
+        }
+    }
+
+
+    public void OnIdleState()
+    {
+        if (monsters == null || monsters.Count == 0)
+            return;
+        
+        SetState(EPlayerState.Move);
+        animationHandler.SetMoveHash(false);
+    }
+
+    public void OnMoveState()
+    {
+        animationHandler.SetMoveHash(true); 
+
+        if (currentTarget != null)
+            agent.SetDestination(currentTarget.transform.position);
+
+        if (IsAttackable()) 
+        {
+            SetState(EPlayerState.Attack); 
+            animationHandler.SetMoveHash(false);  
+        }
+        
+        else if (currentTarget == null)
+            SetState(EPlayerState.Idle);
+    }
+
+    public void OnAttackState()
+    {
+        bool isAttackable = IsAttackable();
+        animationHandler.SetAttackHash(isAttackable); 
+
+        if (!isAttackable) 
+            SetState(EPlayerState.Idle);
+         
+    }
+
+    public void OnDeathState()
+    {       
+        animationHandler.SetDeathHash(true);
     }
  
-    public override void OnAttack()
+    private bool IsAttackable()
     {
-        CurrentTarget.GetComponent<BattleObject>().OnDamage(playerStatHandler.GetStat(EStat.Damage)); 
-    } 
-    public void FindMonsters()
-    {
-        monsters = Managers.Stage.GetMonsters().ToList();
+        return Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange;
     }
 
-    public GameObject FindNextTarget()
+    public void SetStageMonster(List<GameObject> monsters)
     {
-        CurrentTarget = null;
-        float closestDistance = float.MaxValue;
+        this.monsters = monsters; 
+        this.monsters.Sort((a, b) => Vector3.Distance(transform.position, a.transform.position).CompareTo(Vector3.Distance(transform.position, b.transform.position)));
+        currentTarget = monsters[0];
 
-        foreach (GameObject monster in monsters)
-        {
-            if (monster.activeInHierarchy)
+        StartCoroutine(UpdateTargetMonster());
+    }
+
+    private IEnumerator UpdateTargetMonster()
+    {
+        while(true)
+        {   
+            if (monsters != null && monsters.Count > 0)
             {
-                float distance = Vector3.Distance(transform.position, monster.transform.position);
-                if (distance < closestDistance)
-                {
-                    closestDistance = distance;
-                    CurrentTarget = monster;
-                }
+                monsters.Sort((a, b) => Vector3.Distance(transform.position, a.transform.position).CompareTo(Vector3.Distance(transform.position, b.transform.position)));
+                currentTarget = monsters[0];
             }
-        }
 
-        return CurrentTarget;
-    }
-
-    public void MoveToTarget()
-    {
-        if (CurrentTarget != null)
-        {
-            agent.SetDestination(CurrentTarget.transform.position);
-            SetAnimationState(AnimState.Move);
-        }
-    }
-
-    public void RotateTowardsTarget(float rotationSpeed)
-    {
-        if (CurrentTarget == null)
-            return;
             
-        Vector3 directionToTarget = (CurrentTarget.transform.position - transform.position).normalized;
-        directionToTarget.y = 0;
-        
-        if (directionToTarget != Vector3.zero)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-            float rotationAmount = rotationSpeed * Time.deltaTime;
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationAmount);
+            
+
+            yield return new WaitForSeconds(0.3f); 
         }
     }
-
-    public void SetAnimationState(AnimState state)
-    {
-        animationHandler.SetIdleHash(false);
-        animationHandler.SetMoveHash(false);
-        animationHandler.SetAttackHash(false);
-        
-        switch (state)
-        {
-            case AnimState.Idle:
-                animationHandler.SetIdleHash(true);
-                break;
-            case AnimState.Move:
-                animationHandler.SetMoveHash(true);
-                break;
-            case AnimState.Attack:
-                animationHandler.SetAttackHash(true);
-                break;
-            case AnimState.Death:
-                animationHandler.SetDeathHash(true);
-                break;
-        }
-    }
-
-    public void OnDeath()
-    {
-        ChangeState(PlayerStateType.Death);
-    }
-
-
 }
 
 

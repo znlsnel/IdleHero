@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1036563690405634789}
   - component: {fileID: 6727837177599352348}
   - component: {fileID: 3291496242986785750}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Railing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ PrefabInstance:
     - target: {fileID: 6198423390703053500, guid: 37df95e099543694bbfad371fa261260,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6198423390703053500, guid: 37df95e099543694bbfad371fa261260,
         type: 3}
@@ -258,7 +258,7 @@ PrefabInstance:
     - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
         type: 3}
@@ -342,7 +342,7 @@ PrefabInstance:
     - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
         type: 3}

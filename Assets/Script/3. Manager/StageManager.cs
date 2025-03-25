@@ -7,13 +7,15 @@ using UnityEngine.AI;
 
 public class StageManager : IManager
 {
-    private HashSet<GameObject> _monsters = new HashSet<GameObject>();
-    public GameObject[] GetMonsters()=> _monsters.ToArray();
-    public DungeonGenerator dungeonGenerator {get; private set;}
+    private List<GameObject> _monsters = new List<GameObject>();
+    private DungeonGenerator dungeonGenerator;
+    private PlayerController playerController;
+    public List<GameObject> GetMonsters()=> _monsters;
 
     public void Init()
     {  
         dungeonGenerator = GameObject.FindFirstObjectByType<DungeonGenerator>();
+        playerController = GameObject.FindFirstObjectByType<PlayerController>();
     }
     
 
@@ -22,13 +24,13 @@ public class StageManager : IManager
  
     }
 
-    public void SpawnMonster(float delay = 1f, int count = 50) 
+    public void SpawnMonster(float delay = 1f, int count = 5)  
     {
         Managers.Instance.StartCoroutine(SpawnMonsterCoroutine(delay, count));
     } 
 
 
-    private IEnumerator SpawnMonsterCoroutine(float delay, int count)
+    private IEnumerator SpawnMonsterCoroutine(float delay, int count) 
     { 
         yield return new WaitForSeconds(delay);
         
@@ -41,16 +43,16 @@ public class StageManager : IManager
             Ray ray = new Ray(randomPosition, Vector3.down);
             RaycastHit hit;
 
-            if(Physics.Raycast(ray, out hit, 15)) 
+            if(Physics.Raycast(ray, out hit, 30))  
                 randomPosition = hit.point; 
  
             if(randomPosition == Vector3.zero) 
                 continue;
             
             // 몬스터 생성 및 배치
-            //GameObject monster = Managers.Pool.Get("Monster/Bat"); 
-            GameObject monster = Managers.Resource.Load<GameObject>("Monster/Bat");
-            monster = GameObject.Instantiate(monster); 
+            GameObject monster = Managers.Pool.Get("Monster/Bat");  
+            //GameObject monster = Managers.Resource.Load<GameObject>("Monster/Bat");
+          //  monster = GameObject.Instantiate(monster);  
             
             monster.transform.position = randomPosition;
                         
@@ -58,12 +60,14 @@ public class StageManager : IManager
             monster.GetComponent<MonsterController>().onDie += UnregisterMonster;
 
             // 각 몬스터 생성 사이에 약간의 딜레이 추가
-            yield return null;
+          //  yield return null; 
         }
+ 
+        playerController.SetStageMonster(_monsters); 
     } 
  
-    public void UnregisterMonster(GameObject monster)
+    private void UnregisterMonster(GameObject monster)
     {
         _monsters.Remove(monster);
     }
-}
+} 
