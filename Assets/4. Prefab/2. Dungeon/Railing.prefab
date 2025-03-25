@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &8302838431608543443
 Transform:
@@ -120,6 +120,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: P_MOD_Railing_01_straight (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6198423390703053500, guid: 37df95e099543694bbfad371fa261260,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6944094205098924207, guid: 37df95e099543694bbfad371fa261260,
         type: 3}
@@ -245,6 +250,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_MOD_Railing_01_column
       objectReference: {fileID: 0}
+    - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -318,6 +328,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: P_MOD_Railing_01_column (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

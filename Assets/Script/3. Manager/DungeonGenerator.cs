@@ -3,7 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
+using Unity.AI.Navigation;
 
 [Serializable]
 public class BuildElements
@@ -27,23 +30,27 @@ public class DungeonGenerator : MonoBehaviour
     // Dungeon Size
     [SerializeField] private Vector2 _dungeonSize;
     [SerializeField] private int _dungeonDepth;
+    [SerializeField] private bool autoBakeNavMesh = true;
+    
+    // NavMesh 
+    private NavMeshSurface navMeshSurface;
 
     // Dungeon Node
     private List<Vector3> _nodes = new List<Vector3>();
     private List<(int, int)> _edges = new List<(int, int)>();
-    void Awake()
+    
+    void Awake() 
     {
+        navMeshSurface = gameObject.GetOrAddComponent<NavMeshSurface>();
         GenerateDungeon();
     }
 
+ 
     public void GenerateDungeon()
     {
         // 던전 생성 로직
         // 노드 생성
         CreateNode();
-
-        // 노드 배치
-        PlaceNodes();
 
         // 노드 연결
         ConnectNodes();
@@ -53,12 +60,18 @@ public class DungeonGenerator : MonoBehaviour
 
         // 난간 설치
         GenerateRailing();
+
+        // 네비게이션 메쉬 베이크
+        navMeshSurface.BuildNavMesh();
     }
 
     private void CreateNode()
     {
-        _nodes.Clear(); 
         bool [,] _visited = new bool[(int)_dungeonSize.x, (int)_dungeonSize.y];
+
+        _nodes.Clear(); 
+        _nodes.Add(new Vector3(0, 0, 0)); 
+        _visited[0, 0] = true;
 
         int nodeCnt = _dungeonDepth;
         while (nodeCnt > 0)
@@ -73,13 +86,11 @@ public class DungeonGenerator : MonoBehaviour
                 nodeCnt--;
             } 
         }
-    }
 
-    private void PlaceNodes()
-    {
         foreach (var node in _nodes)
         {
             GameObject floor1 = Instantiate(_floor.prefab, node*8 - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
+            floor1.transform.SetParent(transform, false);
         }
     }
 
@@ -167,6 +178,8 @@ public class DungeonGenerator : MonoBehaviour
                 visited.Add(start);
 
                 GameObject floor1 = Instantiate(_floor.prefab, start*8 - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
+            floor1.transform.SetParent(transform, false);
+
                 _nodes.Add(start); 
             }
         } 
@@ -191,6 +204,7 @@ public class DungeonGenerator : MonoBehaviour
                 var go = Instantiate(railing.prefab, curNode + new Vector3(-(_floor.sizeX/2), 0, _floor.sizeZ/2), Quaternion.identity); 
                 go.transform.localScale = new Vector3(1, 1, 1);
                 go.transform.eulerAngles = new Vector3(0, 90, 0);
+                go.transform.SetParent(transform, false);
             }
 
             // 오른쪽에 다른 노드가 있는가? 
@@ -199,6 +213,7 @@ public class DungeonGenerator : MonoBehaviour
                 var go = Instantiate(railing.prefab, curNode + new Vector3(_floor.sizeX/2, 0, _floor.sizeZ/2), Quaternion.identity); 
                 go.transform.localScale = new Vector3(1, 1, 1);
                 go.transform.eulerAngles = new Vector3(0, -90, 0);
+                go.transform.SetParent(transform, false);
             }
 
             // 위에 다른 노드가 있는가?
@@ -206,12 +221,14 @@ public class DungeonGenerator : MonoBehaviour
             {
                 var go = Instantiate(railing.prefab, curNode + new Vector3(0, 0, _floor.sizeZ), Quaternion.identity); 
                 go.transform.localScale = new Vector3(-1, 1, 1);
+                go.transform.SetParent(transform, false);
             }
  
             // 아래에 다른 노드가 있는가?
             if (!nodeHash.Contains(new Vector2(_nodes[i].x, _nodes[i].z - 1)))
             {
-                Instantiate(railing.prefab, curNode, Quaternion.identity); 
+                var go = Instantiate(railing.prefab, curNode, Quaternion.identity);  
+                go.transform.SetParent(transform, false);
             }
         }
 
