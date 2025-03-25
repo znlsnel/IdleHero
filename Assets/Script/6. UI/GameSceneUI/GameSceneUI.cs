@@ -11,12 +11,12 @@ public class GameSceneUI : UI_Scene
     [SerializeField] private TextMeshProUGUI coinsText;
     [SerializeField] private TextMeshProUGUI stageText;
 
-    private PlayerStatHandler playerStatHandler;
+    private PlayerStatData playerStatHandler;
 
 
     private void Start()
     {
-        playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatHandler;
+        playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatData;
         playerStatHandler.OnCheangeValue += UpdateUI; 
         UpdateUI();
 

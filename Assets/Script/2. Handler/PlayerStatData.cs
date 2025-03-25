@@ -5,7 +5,7 @@ using UnityEngine;
 using static DesignEnums;
 
 [Serializable]
-public class PlayerStatHandler
+public class PlayerStatData
 {
     private Dictionary<SkillInfo, int> _skills = new Dictionary<SkillInfo, int>();
     private float[] stats;
@@ -19,20 +19,36 @@ public class PlayerStatHandler
  
     public event Action OnCheangeValue;
 
-    public PlayerStatHandler()
+    public PlayerStatData()
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
-        stats[(int)EStat.AttackRange] = 3f;  
-        stats[(int)EStat.Damage] = 10f; 
+        stats[(int)EStat.AttackRange] = 1f;  
+        stats[(int)EStat.Damage] = 3f; 
         stats[(int)EStat.AttackRate] = 1f;
-        stats[(int)EStat.MoveSpeed] = 10f;
-        stats[(int)EStat.ManaRecoveryRate] = 1f;
-        stats[(int)EStat.HealthRecoveryRate] = 1f;
-        stats[(int)EStat.EvasionRate] = 1f;
-        stats[(int)EStat.Armor] = 1f;
-        stats[(int)EStat.CriticalHitRate] = 1f; 
+        stats[(int)EStat.MoveSpeed] = 5f; 
+        stats[(int)EStat.ManaRecoveryRate] = 0f;
+        stats[(int)EStat.HealthRecoveryRate] = 0f; 
+        stats[(int)EStat.EvasionRate] = 0f;
+        stats[(int)EStat.Armor] = 0f;
+        stats[(int)EStat.CriticalHitRate] = 10f; 
+         
+        
     }
-  
+    
+    public void Init()
+    {
+        Managers.Instance.StartCoroutine(UpdateCondition(1f));
+    }
+
+    IEnumerator UpdateCondition(float time)
+    {
+        while (true)
+        {
+            AddHealth((int)stats[(int)EStat.HealthRecoveryRate]);
+            yield return new WaitForSeconds(time);
+        }
+    }
+
     public void AddSkill(SkillInfo skill)
     {
         if (_skills.ContainsKey(skill))
@@ -85,10 +101,12 @@ public class PlayerStatHandler
         return (int)(stat * (1 + rate * 0.01f));  
     }
 
-
     public void AddHealth(int amount)
     {
         Health += amount;
+        if (Health > MaxHealth)
+            Health = MaxHealth;
+        
         Debug.Log($"Health increased: {Health}");
         OnCheangeValue?.Invoke();
     }
@@ -96,6 +114,9 @@ public class PlayerStatHandler
     public void SubtractHealth(int amount)
     {
         Health -= amount;
+        if (Health < 0)
+            Health = 0;
+
         Debug.Log($"Health decreased: {Health}"); 
         OnCheangeValue?.Invoke();
     }

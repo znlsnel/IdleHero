@@ -30,4 +30,9 @@ public class PlayerAnimationHandler : MonoBehaviour
     {
         animator.SetBool(DeathHash, isDeath);
     }
+
+    public void SetSpeed(float speed)
+    {
+        animator.speed = speed;
+    }
 }

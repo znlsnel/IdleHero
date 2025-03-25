@@ -6,6 +6,7 @@ using static DesignEnums;
 using System.Collections;
 using System.ComponentModel;
 using System;
+using Random = UnityEngine.Random;
 
 public enum EPlayerState
 {
@@ -20,7 +21,7 @@ public enum EPlayerState
 [RequireComponent(typeof(PlayerAnimationHandler))]
 public class PlayerController : BattleObject
 {
-    [field: SerializeField] public PlayerStatHandler playerStatHandler { get; private set; } = new PlayerStatHandler();
+    [field: SerializeField] public PlayerStatData playerStatData { get; private set; } = new PlayerStatData();
 
     // Component
     public PlayerAnimationHandler animationHandler {get; private set;}
@@ -36,7 +37,7 @@ public class PlayerController : BattleObject
 
     // Properties
     private EPlayerState currentState = EPlayerState.Idle;
-    private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
+    private float attackRange => playerStatData.GetStat(EStat.AttackRange);
 
     // Event Action
     public event Action OnPlayerAttack;
@@ -49,8 +50,9 @@ public class PlayerController : BattleObject
         agent = gameObject.GetOrAddComponent<NavMeshAgent>();   
 
         rigidbody = GetComponent<Rigidbody>();
-
-        playerStatHandler.Health = playerStatHandler.MaxHealth;
+ 
+        playerStatData.Init(); 
+        playerStatData.Health = playerStatData.MaxHealth;
         agent.enabled = false;
 
         Invoke(nameof(Init), 1.0f);  
@@ -66,24 +68,44 @@ public class PlayerController : BattleObject
     {
         if (agent.enabled && agent.isOnNavMesh)
             UpdateState();
+
+        agent.speed = playerStatData.GetStat(EStat.MoveSpeed); 
+        targetSensorHandler.transform.localScale = new Vector3(attackRange, attackRange, attackRange);
     } 
     
     private void Init()
     {
         agent.enabled = true;
-        agent.speed = playerStatHandler.GetStat(EStat.MoveSpeed);
+        agent.speed = playerStatData.GetStat(EStat.MoveSpeed);
     }
-
+ 
     public override void OnDamage(float damage)
     { 
-        playerStatHandler.SubtractHealth((int)damage); 
+        if (Random.Range(0, 100) < playerStatData.GetStat(EStat.EvasionRate))
+            return;
+
+        float armorDamage = damage * (playerStatData.GetStat(EStat.Armor) * 0.01f);
+        damage = Mathf.Clamp(damage, damage / 2, damage - armorDamage); 
+        playerStatData.SubtractHealth((int)damage);  
     }
   
     public override void OnAttack()
     {
         foreach (var target in targetSensorHandler.OverlabTargets)
         { 
-            target.GetComponent<BattleObject>()?.OnDamage(playerStatHandler.GetStat(EStat.Damage));
+            if (target.TryGetComponent(out MonsterController monsterController) == false)
+                continue;
+
+            if (monsterController.IsDead)
+                continue; 
+
+
+            int damage = playerStatData.GetStat(EStat.Damage);
+            if (Random.Range(0, 100) < playerStatData.GetStat(EStat.CriticalHitRate))
+                damage *= 2;
+
+
+            target.GetComponent<BattleObject>()?.OnDamage(damage);
         }
         OnPlayerAttack?.Invoke();
     }
@@ -95,6 +117,8 @@ public class PlayerController : BattleObject
     {
         currentState = state;
         agent.isStopped = state != EPlayerState.Move; 
+        animationHandler.SetSpeed(state == EPlayerState.Attack ? 
+            playerStatData.GetStat(EStat.AttackRate) : 1.0f);  
     }
 
     public void UpdateState()
@@ -198,6 +222,12 @@ public class PlayerController : BattleObject
     
     #endregion
     
+    private IEnumerator SetTimer(Action action, float time)
+    {
+        yield return new WaitForSeconds(time);
+        action?.Invoke();
+
+    }
 
 }
 

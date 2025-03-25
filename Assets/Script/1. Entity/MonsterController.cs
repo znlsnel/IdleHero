@@ -121,6 +121,11 @@ public class MonsterController : BattleObject, IPoolable
         {
             SetState(MonsterState.Death);
         } 
+
+        DamageUI damageUI = Managers.UI.ShowSceneChildUI<DamageUI>();
+        damageUI.InitText(damage.ToString(), gameObject);  
+
+        Destroy(damageUI.gameObject, 1.5f); 
     }
     public override void OnAttack()
     {

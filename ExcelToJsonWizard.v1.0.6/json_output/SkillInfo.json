@@ -170,21 +170,6 @@
       "Image": "Priest"
     },
     {
-      "key": 1012,
-      "Name": "Sorcerer",
-      "Description": "플레이어의 공격이 전기를 터트립니다",
-      "Stat": [
-        0
-      ],
-      "StatValue": [
-        0
-      ],
-      "EffectPrefab": [
-        "Sorcerer"
-      ],
-      "Image": "Sorcerer"
-    },
-    {
       "key": 1013,
       "Name": "Sword",
       "Description": "치명타 확률이 오릅니다",

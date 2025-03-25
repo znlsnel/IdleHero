@@ -55,6 +55,17 @@ public class UIManager : IManager
 		return Util.GetOrAddComponent<T>(go);
 	}
 
+    public T ShowSceneChildUI<T>(string name = null) where T : UI_Scene
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
+        go.transform.SetParent(_sceneUIParent.transform, false);
+ 
+        return Util.GetOrAddComponent<T>(go); 
+    }
+
 	public T ShowSceneUI<T>(string name = null) where T : UI_Scene
 	{
 		if (string.IsNullOrEmpty(name))
@@ -63,7 +74,7 @@ public class UIManager : IManager
 		GameObject go = Managers.Resource.Instantiate($"UI/Scene/{name}");
 		T sceneUI = Util.GetOrAddComponent<T>(go);
         _sceneUI = sceneUI; 
- 
+  
 		go.transform.SetParent(_sceneUIParent.transform, false);
 
 		return sceneUI; 

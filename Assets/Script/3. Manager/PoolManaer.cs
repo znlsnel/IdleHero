@@ -43,7 +43,7 @@ public class PoolManager : IManager
         {
             if (obj == null)
                 return;
-
+            
             obj.transform.parent = Root;
             obj.gameObject.SetActive(false);
 

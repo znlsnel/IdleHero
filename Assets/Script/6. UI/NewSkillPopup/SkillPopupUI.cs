@@ -16,11 +16,11 @@ public class SkillPopupUI : UI_Popup
 
     private List<SkillPopupButtonUI> _skillButtons = new List<SkillPopupButtonUI>();
     private List<SkillInfo> _selectedSkills = new List<SkillInfo>();
-    private PlayerStatHandler _playerStatHandler;
+    private PlayerStatData _playerStatHandler;
 
     void Awake()
     {
-        _playerStatHandler = Object.FindFirstObjectByType<PlayerController>()?.playerStatHandler;
+        _playerStatHandler = Object.FindFirstObjectByType<PlayerController>()?.playerStatData;
         Init();
     }
 
@@ -70,6 +70,7 @@ public class SkillPopupUI : UI_Popup
             GameObject skill =Managers.Resource.Load<GameObject>($"Skill/{skillName}");
             if (skill != null)
                 Instantiate(skill); 
+                
         } 
         
         
