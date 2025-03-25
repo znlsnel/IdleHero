@@ -17,6 +17,6 @@ MonoBehaviour:
   <MaxHealth>k__BackingField: 30
   <Damage>k__BackingField: 5
   <AttackDelay>k__BackingField: 2
-  <AttackRange>k__BackingField: 2
-  <TraceRange>k__BackingField: 5
-  <MoveSpeed>k__BackingField: 1
+  <AttackRange>k__BackingField: 3
+  <TraceRange>k__BackingField: 10
+  <MoveSpeed>k__BackingField: 3

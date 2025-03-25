@@ -31,6 +31,8 @@ public class MonsterController : BattleObject, IPoolable
     [SerializeField] private MonsterSO monsterSO;
 
     // Components
+    private TargetSensorHandler targetSensorHandler;
+    private Rigidbody rigidbody;
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -42,7 +44,8 @@ public class MonsterController : BattleObject, IPoolable
     private float AttackDamage => monsterSO.Damage;
     private float AttackDelay => monsterSO.AttackDelay; 
     private float DistanceToPlayer => Vector3.Distance(transform.position, player.transform.position);
-    public bool IsDead => isDead;
+    public bool IsDead => isDead; 
+
     // Values
     private MonsterState currentState = MonsterState.Idle;
     private float lastAttackTime;
@@ -56,6 +59,8 @@ public class MonsterController : BattleObject, IPoolable
     {
         agent = gameObject.GetOrAddComponent<NavMeshAgent>(); 
         animator = GetComponentInChildren<Animator>();
+        targetSensorHandler = GetComponentInChildren<TargetSensorHandler>();
+        rigidbody = GetComponent<Rigidbody>();
     } 
 
     private void Update()
@@ -118,8 +123,15 @@ public class MonsterController : BattleObject, IPoolable
     }
     public override void OnAttack()
     {
-        
+        foreach (var target in targetSensorHandler.OverlabTargets)
+        {
+            if (target.TryGetComponent(out PlayerController playerController))
+            {
+                playerController.OnDamage(AttackDamage); 
+            }
+        }
     }
+
     #endregion
     #region State
     private void UpdateState()
@@ -143,7 +155,9 @@ public class MonsterController : BattleObject, IPoolable
     private void SetState(MonsterState newState)
     {
         currentState = newState;
-        agent.isStopped = currentState == MonsterState.Trace; 
+        agent.isStopped = currentState != MonsterState.Trace;  
+        if (agent.isStopped )
+            rigidbody.velocity *= 0.1f;
     }  
 
     private void OnIdleState()
@@ -178,6 +192,7 @@ public class MonsterController : BattleObject, IPoolable
     private void OnAttackState()
     { 
         agent.isStopped = false;
+        rigidbody.velocity *= 0.1f;
 
         // 공격할 수 없다면 추적 모드로 변환
         if (!IsAttackable(DistanceToPlayer))
@@ -218,3 +233,4 @@ public class MonsterController : BattleObject, IPoolable
 
 
 }
+ 

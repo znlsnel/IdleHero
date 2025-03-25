@@ -11,21 +11,21 @@ public class PlayerStatHandler
     private float[] stats;
 
     // 플레이어 기본 속성
-    [SerializeField] private int _maxHealth;
-    [SerializeField] private int _health;
-    [SerializeField] private int _experience;
-    [SerializeField] private int _maxExperience;
-    [SerializeField] private int _coins; 
-
+    [SerializeField] public int MaxHealth {get; set;} = 100;
+    [SerializeField] public int Health {get; set;} = 100; 
+    [SerializeField] public int Experience {get; set;} = 0;
+    [SerializeField] public int MaxExperience {get; set;} = 100;
+    [SerializeField] public int Coins {get; set;} = 0; 
+ 
     public event Action OnCheangeValue;
 
     public PlayerStatHandler()
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
-        stats[(int)EStat.AttackRange] = 2f;
-        stats[(int)EStat.Damage] = 10f;
+        stats[(int)EStat.AttackRange] = 3f;  
+        stats[(int)EStat.Damage] = 1f; 
         stats[(int)EStat.AttackRate] = 1f;
-        stats[(int)EStat.MoveSpeed] = 3.5f;
+        stats[(int)EStat.MoveSpeed] = 10f;
         stats[(int)EStat.ManaRecoveryRate] = 1f;
         stats[(int)EStat.HealthRecoveryRate] = 1f;
         stats[(int)EStat.EvasionRate] = 1f;
@@ -85,69 +85,32 @@ public class PlayerStatHandler
         return (int)(stat * (1 + rate * 0.01f));  
     }
 
-    public int MaxHealth
-    {
-        get => _maxHealth;
-        set => _maxHealth = Mathf.Max(0, value); // 최대 체력은 0 이상으로 유지
-    }
 
-    public int Health
-    {
-        get => _health;
-        set
-        {
-            _health = Mathf.Clamp(value, 0, MaxHealth);
-            OnCheangeValue?.Invoke();
-        }
-    }
-
-    public int Coins
-    {
-        get => _coins;
-        set
-        {
-            _coins = Mathf.Max(0, value);
-            OnCheangeValue?.Invoke();
-        }
-    }
-
-    public int MaxExperience
-    {
-        get => _maxExperience;
-        set => _maxExperience = Mathf.Max(0, value); // 최대 경험치는 0 이상으로 유지
-    }
-
-    public int Experience
-    {
-        get => _experience;
-        set
-        {
-            _experience = Mathf.Clamp(value, 0, MaxExperience);
-            OnCheangeValue?.Invoke();
-        }
-    }
-
-    public void IncreaseHealth(int amount)
+    public void AddHealth(int amount)
     {
         Health += amount;
         Debug.Log($"Health increased: {Health}");
+        OnCheangeValue?.Invoke();
     }
 
-    public void DecreaseHealth(int amount)
+    public void SubtractHealth(int amount)
     {
         Health -= amount;
-        Debug.Log($"Health decreased: {Health}");
+        Debug.Log($"Health decreased: {Health}"); 
+        OnCheangeValue?.Invoke();
     }
 
-    public void IncreaseCoins(int amount)
+    public void IncreaseCoins(int amount) 
     {
         Coins += amount;
         Debug.Log($"Coins increased: {Coins}");
+        OnCheangeValue?.Invoke();
     }
 
     public void DecreaseCoins(int amount)
     {
         Coins -= amount;
-        Debug.Log($"Coins decreased: {Coins}");
+        Debug.Log($"Coins decreased: {Coins}"); 
+        OnCheangeValue?.Invoke();
     }
 }

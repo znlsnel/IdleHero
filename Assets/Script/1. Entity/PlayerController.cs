@@ -14,7 +14,7 @@ public enum EPlayerState
     Death
 }
 
-
+ 
 
 [RequireComponent(typeof(PlayerAnimationHandler))]
 public class PlayerController : BattleObject
@@ -25,40 +25,45 @@ public class PlayerController : BattleObject
     public PlayerAnimationHandler animationHandler {get; private set;}
     private TargetSensorHandler targetSensorHandler;
     private NavMeshAgent agent;
+    private Rigidbody rigidbody;
 
     // Monster
     private List<GameObject> monsters;
     public float AttackRange => attackRange; 
 
-    // Values
-    private float currentHealth;
-    private GameObject currentTarget;
+    private GameObject currentTarget; 
 
-
+ 
     // Properties
     private EPlayerState currentState = EPlayerState.Idle;
     private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
 
     void Awake()
     {
-        animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>(); 
         targetSensorHandler = GetComponentInChildren<TargetSensorHandler>(); 
-        currentHealth = playerStatHandler.MaxHealth;
-        agent = gameObject.GetOrAddComponent<NavMeshAgent>();  
+        
+        animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>(); 
+        agent = gameObject.GetOrAddComponent<NavMeshAgent>();   
+
+        rigidbody = GetComponent<Rigidbody>();
+
+        playerStatHandler.Health = playerStatHandler.MaxHealth;
         agent.enabled = false;
+
         Invoke(nameof(Init), 1.0f);  
     } 
 
     private void Init()
     {
         agent.enabled = true;
+        agent.speed = playerStatHandler.GetStat(EStat.MoveSpeed);
     }
 
     // Stat
 
     public override void OnDamage(float damage)
-    {
-        
+    { 
+        playerStatHandler.SubtractHealth((int)damage); 
     }
   
     public override void OnAttack()
@@ -77,7 +82,7 @@ public class PlayerController : BattleObject
     public void SetState(EPlayerState state)
     {
         currentState = state;
-        agent.isStopped = state == EPlayerState.Idle;
+        agent.isStopped = state != EPlayerState.Move; 
     }
 
     public void UpdateState()
@@ -128,11 +133,17 @@ public class PlayerController : BattleObject
 
     public void OnAttackState()
     {
+        if (currentTarget != null) 
+            transform.LookAt(currentTarget.transform);
+
+        
+
         bool isAttackable = IsAttackable();
         animationHandler.SetAttackHash(isAttackable); 
 
         if (!isAttackable) 
             SetState(EPlayerState.Idle);
+        rigidbody.velocity *= 0.1f;
          
     }
 
@@ -143,7 +154,7 @@ public class PlayerController : BattleObject
  
     private bool IsAttackable()
     {
-        return Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange;
+        return monsters != null && monsters.Count > 0 && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange;
     }
 
     public void SetStageMonster(List<GameObject> monsters)

@@ -1946,7 +1946,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2048605671886533319}
   - component: {fileID: 1612513933465856508}
-  - component: {fileID: 7744840172755781432}
   - component: {fileID: 8925933749871561146}
   - component: {fileID: 257496258800576886}
   - component: {fileID: 3267785333457552250}
@@ -1987,34 +1986,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbff6df9192c9d14ebe7f5fcf0cea6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <playerStatHandler>k__BackingField:
-    _maxHealth: 100
-    _health: 100
-    _experience: 23
-    _maxExperience: 100
-    _coins: 100
---- !u!195 &7744840172755781432
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3355953129154047950}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
 --- !u!54 &8925933749871561146
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2037,7 +2008,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -2057,7 +2028,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2

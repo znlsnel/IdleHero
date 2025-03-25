@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameSceneUI : UI_Scene
 {
     [SerializeField] private Slider healthSlider;
-    [SerializeField] private Slider experienceSlider;
+    [SerializeField] private TextMeshProUGUI healthRateText;
     [SerializeField] private TextMeshProUGUI coinsText;
 
     private PlayerStatHandler playerStatHandler;
@@ -16,22 +16,22 @@ public class GameSceneUI : UI_Scene
     private void Start()
     {
         playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatHandler;
-        playerStatHandler = new PlayerStatHandler();
-        playerStatHandler.OnCheangeValue += UpdateUI;
+        playerStatHandler.OnCheangeValue += UpdateUI; 
         UpdateUI();
-    }
+    } 
  
-    private void OnDestroy()
+    private void OnDestroy() 
     {
-        playerStatHandler.OnCheangeValue -= UpdateUI;
+       // playerStatHandler.OnCheangeValue -= UpdateUI;
     }
 
     private void UpdateUI()
     {
-        healthSlider.value = playerStatHandler.Health;
+        healthSlider.value = playerStatHandler.Health; 
         healthSlider.maxValue = playerStatHandler.MaxHealth;
-        experienceSlider.value = playerStatHandler.Experience;
-        experienceSlider.maxValue = playerStatHandler.MaxExperience;
         coinsText.text = playerStatHandler.Coins.ToString();
+    
+        float temp = healthSlider.value / healthSlider.maxValue;
+        healthRateText.text = $"{(int)(temp * 100)}%";    
     }
 }

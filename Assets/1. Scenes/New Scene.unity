@@ -909,13 +909,18 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
+      propertyPath: _dungeonDepth
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
+        type: 3}
       propertyPath: _dungeonSize.x
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
       propertyPath: _dungeonSize.y
-      value: 20
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
