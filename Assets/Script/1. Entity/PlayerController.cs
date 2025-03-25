@@ -38,8 +38,8 @@ public class PlayerController : BattleObject
         agent = GetComponent<NavMeshAgent>();
         animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>();
         currentHealth = playerStatHandler.MaxHealth;
-        FindMonsters();
         
+        FindMonsters();
         InitializeStates();
         ChangeState(PlayerStateType.Idle);
     }

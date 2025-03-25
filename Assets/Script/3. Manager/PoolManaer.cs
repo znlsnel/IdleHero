@@ -90,7 +90,7 @@ public class PoolManager : IManager
     private void CreatePool(GameObject original, int count = 5)
     {
         Pool pool = new Pool();
-        pool.Init(original, count); 
+        pool.Init(original, count);  
         pool.Root.parent = _root;
 
         _pool.Add(original.name, pool);

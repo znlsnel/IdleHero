@@ -40,7 +40,7 @@ public class Managers : Singleton<Managers>
         Init();
         
     }
-    private void Start()
+    private void Start() 
     {
         //UI.ShowPopupUI<SkillPopupUI>(); 
        

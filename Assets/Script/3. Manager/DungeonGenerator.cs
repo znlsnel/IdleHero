@@ -23,7 +23,6 @@ public class DungeonGenerator : MonoBehaviour
     // Build Elements
     [SerializeField] private BuildElements _floor;
     [SerializeField] private BuildElements railing;
-    [SerializeField] private BuildElements _column; 
     [SerializeField] private BuildElements _stair;
     [SerializeField] private BuildElements _corridor;
 
@@ -33,6 +32,7 @@ public class DungeonGenerator : MonoBehaviour
     [SerializeField] private bool autoBakeNavMesh = true;
     
     // NavMesh 
+    [SerializeField] private LayerMask _navMeshLayer;
     private NavMeshSurface navMeshSurface;
 
     // Dungeon Node
@@ -41,6 +41,15 @@ public class DungeonGenerator : MonoBehaviour
     
     void Awake() 
     {
+        if(Random.Range(0, 2) == 0)
+        {
+            float temp = _dungeonSize.x;
+            _dungeonSize.x = _dungeonSize.y;
+            _dungeonSize.y = temp; 
+        }
+        
+
+
         navMeshSurface = gameObject.GetOrAddComponent<NavMeshSurface>();
         GenerateDungeon();
     }
@@ -58,11 +67,23 @@ public class DungeonGenerator : MonoBehaviour
         // 노드 경로 생성
         GeneratePath(); 
 
-        // 난간 설치
-        GenerateRailing();
-
-        // 네비게이션 메쉬 베이크
+        // 난간 설치 
+        GenerateRailing(); 
+ 
+        // // 네비게이션 메쉬 베이크
+        navMeshSurface.layerMask = _navMeshLayer;    
         navMeshSurface.BuildNavMesh();
+    
+
+       // Managers.Player.GetComponent<NavMeshAgent>().SetDestination(_nodes[Random.Range(0, _nodes.Count)] + new Vector3(4, 0, 4)); 
+
+        Managers.Stage.SpawnMonster(); 
+
+    }
+
+    public Vector3 GetRandomPosition()
+    {
+        return _nodes[Random.Range(0, _nodes.Count)] * 8 + new Vector3(0, 0, 4);  
     }
 
     private void CreateNode()
@@ -89,7 +110,7 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach (var node in _nodes)
         {
-            GameObject floor1 = Instantiate(_floor.prefab, node*8 - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
+            GameObject floor1 = Instantiate(_floor.prefab, node*8, Quaternion.identity);
             floor1.transform.SetParent(transform, false);
         }
     }
@@ -177,7 +198,7 @@ public class DungeonGenerator : MonoBehaviour
 
                 visited.Add(start);
 
-                GameObject floor1 = Instantiate(_floor.prefab, start*8 - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
+                GameObject floor1 = Instantiate(_floor.prefab, start*8, Quaternion.identity);
             floor1.transform.SetParent(transform, false);
 
                 _nodes.Add(start); 
@@ -195,14 +216,13 @@ public class DungeonGenerator : MonoBehaviour
         for (int i = 0; i < _nodes.Count; i++)
         {
             Vector3 curNode = _nodes[i] * 8; 
-            curNode -= new Vector3(_floor.sizeX, 0, _floor.sizeZ);
+            
 
 
             // 왼쪽에 다른 노드가 있는가?
             if (!nodeHash.Contains(new Vector2(_nodes[i].x - 1, _nodes[i].z)))
             {
                 var go = Instantiate(railing.prefab, curNode + new Vector3(-(_floor.sizeX/2), 0, _floor.sizeZ/2), Quaternion.identity); 
-                go.transform.localScale = new Vector3(1, 1, 1);
                 go.transform.eulerAngles = new Vector3(0, 90, 0);
                 go.transform.SetParent(transform, false);
             }
@@ -211,7 +231,6 @@ public class DungeonGenerator : MonoBehaviour
             if (!nodeHash.Contains(new Vector2(_nodes[i].x + 1, _nodes[i].z)))
             {
                 var go = Instantiate(railing.prefab, curNode + new Vector3(_floor.sizeX/2, 0, _floor.sizeZ/2), Quaternion.identity); 
-                go.transform.localScale = new Vector3(1, 1, 1);
                 go.transform.eulerAngles = new Vector3(0, -90, 0);
                 go.transform.SetParent(transform, false);
             }
@@ -220,7 +239,7 @@ public class DungeonGenerator : MonoBehaviour
             if (!nodeHash.Contains(new Vector2(_nodes[i].x, _nodes[i].z + 1)))
             {
                 var go = Instantiate(railing.prefab, curNode + new Vector3(0, 0, _floor.sizeZ), Quaternion.identity); 
-                go.transform.localScale = new Vector3(-1, 1, 1);
+                go.transform.eulerAngles = new Vector3(0, 180, 0);
                 go.transform.SetParent(transform, false);
             }
  
@@ -230,7 +249,7 @@ public class DungeonGenerator : MonoBehaviour
                 var go = Instantiate(railing.prefab, curNode, Quaternion.identity);  
                 go.transform.SetParent(transform, false);
             }
-        }
+        } 
 
         // 난간 설치 알고리즘
         // DFS를 사용해서 모든 노드에 대해서 난간 설치

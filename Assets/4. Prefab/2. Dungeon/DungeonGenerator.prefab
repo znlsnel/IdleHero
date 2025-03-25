@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7332774453132417860}
   - component: {fileID: 1853077911117697117}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: DungeonGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,21 +45,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _floor:
-    prefab: {fileID: 1262937158259123645, guid: 2a9b8a25bc63da941a79e7e3bec1e558,
+    prefab: {fileID: 1262937158259123645, guid: 66acb6165c3dec8439123a365e2f01db,
       type: 3}
-    sizeX: 4
-    sizeZ: 4
+    sizeX: 8
+    sizeZ: 8
     stairHeight: 0
   railing:
-    prefab: {fileID: 6198423390703053500, guid: 37df95e099543694bbfad371fa261260,
+    prefab: {fileID: 4999772154064792256, guid: 370ad327ed9312d4583255af9aa717f8,
       type: 3}
-    sizeX: 4
-    sizeZ: 0
-    stairHeight: 0
-  _column:
-    prefab: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
-      type: 3}
-    sizeX: 0
+    sizeX: 8
     sizeZ: 0
     stairHeight: 0
   _stair:
@@ -74,5 +68,9 @@ MonoBehaviour:
     sizeX: 2
     sizeZ: 2
     stairHeight: 1
-  _dungeonSize: {x: 0, y: 0}
-  _dungeonDepth: 0
+  _dungeonSize: {x: 10, y: 10}
+  _dungeonDepth: 12
+  autoBakeNavMesh: 1
+  _navMeshLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295

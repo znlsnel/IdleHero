@@ -20,7 +20,7 @@ public abstract class BattleObject : MonoBehaviour
 
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class MonsterController : BattleObject, IPoolable
+public class MonsterController : BattleObject
 {
     // Animation Data
     private readonly static int moveHash = Animator.StringToHash("Move");
@@ -56,28 +56,27 @@ public class MonsterController : BattleObject, IPoolable
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponentInChildren<Animator>();
-        agent.speed = MoveSpeed; 
+        agent.enabled = false; 
+        Invoke(nameof(Init), 1f); 
     }
 
     #region  IPoolable
+
     private void Update()
     {
-        UpdateState();
+        if (agent.enabled && agent.isOnNavMesh)
+            UpdateState(); 
+          
     }
 
-    public void Initialize(Action<GameObject> returnAction)
+    public void Init()
     {
-        onDie = returnAction;
-        OnSpawn();
-    }
- 
-    public void OnSpawn()
-    {
+        agent.enabled = true;
         SetState(MonsterState.Idle); 
         currentHealth = monsterSO.MaxHealth;
         lastAttackTime = Time.time;
-        Managers.Stage.RegisterMonster(gameObject); 
         isDead = false;
+        agent.speed = MoveSpeed;  
     }
 
     public void OnDespawn()
@@ -85,7 +84,8 @@ public class MonsterController : BattleObject, IPoolable
         onDie?.Invoke(gameObject); 
         animator.SetBool(deathHash, false);
         Managers.Stage.UnregisterMonster(gameObject);  
-    }
+    } 
+    
     #endregion
     public override void OnDamage(float damage)
     {
@@ -128,8 +128,6 @@ public class MonsterController : BattleObject, IPoolable
         agent.isStopped = currentState == MonsterState.Trace;
         
     }
-
-    
     private void OnIdleState()
     {
         // 추적이 가능하다면 추적 상태로 
