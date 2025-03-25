@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4759533826633440170
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7332774453132417860}
+  - component: {fileID: 1853077911117697117}
+  m_Layer: 0
+  m_Name: DungeonGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7332774453132417860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4759533826633440170}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1853077911117697117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4759533826633440170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6a1753976058eb438b316c16a94fc2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _floor:
+    prefab: {fileID: 1262937158259123645, guid: 2a9b8a25bc63da941a79e7e3bec1e558,
+      type: 3}
+    sizeX: 4
+    sizeZ: 4
+    stairHeight: 0
+  railing:
+    prefab: {fileID: 6198423390703053500, guid: 37df95e099543694bbfad371fa261260,
+      type: 3}
+    sizeX: 4
+    sizeZ: 0
+    stairHeight: 0
+  _column:
+    prefab: {fileID: 3986572772302027072, guid: f55f25ba3de4b294f95933ea6391aa57,
+      type: 3}
+    sizeX: 0
+    sizeZ: 0
+    stairHeight: 0
+  _stair:
+    prefab: {fileID: 8533895034687612893, guid: 0741c0cc3c1569b419f314d972677f46,
+      type: 3}
+    sizeX: 2
+    sizeZ: 4
+    stairHeight: 0
+  _corridor:
+    prefab: {fileID: 8664350380594266003, guid: 2aad6afdd13781540939f8e8c90481f3,
+      type: 3}
+    sizeX: 2
+    sizeZ: 2
+    stairHeight: 1
+  _dungeonSize: {x: 0, y: 0}
+  _dungeonDepth: 0

@@ -12,14 +12,15 @@ public enum MonsterState
     Death
 }
 
-public interface IDamagable
+public abstract class BattleObject : MonoBehaviour
 {
-    void OnDamage(float damage);
+    public abstract void OnDamage(float damage);
+    public abstract void OnAttack(); 
 }
 
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class MonsterController : MonoBehaviour, IPoolable, IDamagable
+public class MonsterController : BattleObject, IPoolable
 {
     // Animation Data
     private readonly static int moveHash = Animator.StringToHash("Move");
@@ -47,9 +48,9 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
     private MonsterState currentState = MonsterState.Idle;
     private float lastAttackTime;
     private float currentHealth;
-
+    private bool isDead = false;
     // Event
-    private Action<GameObject> onDie;
+    public Action<GameObject> onDie;
 
     private void Awake()
     {
@@ -57,6 +58,8 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
         animator = GetComponentInChildren<Animator>();
         agent.speed = MoveSpeed; 
     }
+
+    #region  IPoolable
     private void Update()
     {
         UpdateState();
@@ -74,6 +77,7 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
         currentHealth = monsterSO.MaxHealth;
         lastAttackTime = Time.time;
         Managers.Stage.RegisterMonster(gameObject); 
+        isDead = false;
     }
 
     public void OnDespawn()
@@ -82,8 +86,8 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
         animator.SetBool(deathHash, false);
         Managers.Stage.UnregisterMonster(gameObject);  
     }
-
-    public void OnDamage(float damage)
+    #endregion
+    public override void OnDamage(float damage)
     {
         if (currentState == MonsterState.Death)
             return;
@@ -94,7 +98,12 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
             SetState(MonsterState.Death);
         } 
     }
-
+    public override void OnAttack()
+    {
+        
+    }
+ 
+    
     private void UpdateState()
     {
         switch (currentState)
@@ -170,6 +179,10 @@ public class MonsterController : MonoBehaviour, IPoolable, IDamagable
      
     private void OnDeathState()
     {
+        if (isDead)
+            return;
+
+        isDead = true;  
         agent.isStopped = true;
         animator.SetBool(deathHash, true);
 

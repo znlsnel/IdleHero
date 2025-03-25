@@ -23,6 +23,14 @@ public class PlayerStatHandler
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
         stats[(int)EStat.AttackRange] = 2f;
+        stats[(int)EStat.Damage] = 10f;
+        stats[(int)EStat.AttackRate] = 1f;
+        stats[(int)EStat.MoveSpeed] = 3.5f;
+        stats[(int)EStat.ManaRecoveryRate] = 1f;
+        stats[(int)EStat.HealthRecoveryRate] = 1f;
+        stats[(int)EStat.EvasionRate] = 1f;
+        stats[(int)EStat.Armor] = 1f;
+        stats[(int)EStat.CriticalHitRate] = 1f; 
     }
   
     public void AddSkill(SkillInfo skill)

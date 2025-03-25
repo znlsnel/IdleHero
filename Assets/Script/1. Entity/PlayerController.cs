@@ -10,7 +10,7 @@ using System.ComponentModel;
 
 
 [RequireComponent(typeof(PlayerAnimationHandler))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : BattleObject
 {
     [field: SerializeField] public PlayerStatHandler playerStatHandler { get; private set; } = new PlayerStatHandler();
 
@@ -20,11 +20,11 @@ public class PlayerController : MonoBehaviour
 
     // Monster
     private List<GameObject> monsters;
-    private GameObject currentTarget;
-
-    public GameObject CurrentTarget => currentTarget;
+    public GameObject CurrentTarget {get; private set;}
     public NavMeshAgent Agent => agent;
     public float AttackRange => attackRange; 
+    
+    private float currentHealth;
 
     // Stat
     private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>();
+        currentHealth = playerStatHandler.MaxHealth;
         FindMonsters();
         
         InitializeStates();
@@ -45,11 +46,11 @@ public class PlayerController : MonoBehaviour
 
     private void InitializeStates()
     {
-        states = new Dictionary<PlayerStateType, IPlayerState>
+        states = new Dictionary<PlayerStateType, IPlayerState> 
         {
             { PlayerStateType.Idle, new IdleState(this) },
             { PlayerStateType.Move, new MoveState(this) },
-            { PlayerStateType.Attack, new MonsterAttackState(this) },
+            { PlayerStateType.Attack, new AttackState(this) },
             { PlayerStateType.Death, new DeathState(this) }
         };
     }
@@ -69,6 +70,22 @@ public class PlayerController : MonoBehaviour
             currentState.Update();
     }
 
+    public override void OnDamage(float damage)
+    {
+        if (currentHealth <= 0)
+            return;
+
+        currentHealth -= damage;
+        if (currentHealth <= 0)
+        {
+            OnDeath();
+        } 
+    }
+ 
+    public override void OnAttack()
+    {
+        CurrentTarget.GetComponent<BattleObject>().OnDamage(playerStatHandler.GetStat(EStat.Damage)); 
+    } 
     public void FindMonsters()
     {
         monsters = Managers.Stage.GetMonsters().ToList();
@@ -76,7 +93,7 @@ public class PlayerController : MonoBehaviour
 
     public GameObject FindNextTarget()
     {
-        currentTarget = null;
+        CurrentTarget = null;
         float closestDistance = float.MaxValue;
 
         foreach (GameObject monster in monsters)
@@ -87,28 +104,29 @@ public class PlayerController : MonoBehaviour
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
-                    currentTarget = monster;
+                    CurrentTarget = monster;
                 }
             }
         }
-        return currentTarget;
+
+        return CurrentTarget;
     }
 
     public void MoveToTarget()
     {
-        if (currentTarget != null)
+        if (CurrentTarget != null)
         {
-            agent.SetDestination(currentTarget.transform.position);
+            agent.SetDestination(CurrentTarget.transform.position);
             SetAnimationState(AnimState.Move);
         }
     }
 
     public void RotateTowardsTarget(float rotationSpeed)
     {
-        if (currentTarget == null)
+        if (CurrentTarget == null)
             return;
             
-        Vector3 directionToTarget = (currentTarget.transform.position - transform.position).normalized;
+        Vector3 directionToTarget = (CurrentTarget.transform.position - transform.position).normalized;
         directionToTarget.y = 0;
         
         if (directionToTarget != Vector3.zero)
@@ -146,6 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         ChangeState(PlayerStateType.Death);
     }
+
 
 }
 
