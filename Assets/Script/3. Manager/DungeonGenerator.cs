@@ -75,10 +75,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         foreach (var node in nodes)
         {
-            GameObject floor1 = Instantiate(_floor.prefab, node - new Vector3(8, 0, 8), Quaternion.identity);
-            GameObject floor2 = Instantiate(_floor.prefab, node - new Vector3(4, 0, 8), Quaternion.identity);
-            GameObject floor3 = Instantiate(_floor.prefab, node - new Vector3(8, 0, 4), Quaternion.identity);
-            GameObject floor4 = Instantiate(_floor.prefab, node - new Vector3(4, 0, 4), Quaternion.identity); 
+            GameObject floor1 = Instantiate(_floor.prefab, node - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
         }
     }
 
@@ -120,6 +117,7 @@ public class DungeonGenerator : MonoBehaviour
 
     private void GeneratePath()
     {
+        HashSet<Vector3> visited = new HashSet<Vector3>();
         foreach (var edge in edges)
         {
             var (From, To) = edge;
@@ -136,11 +134,11 @@ public class DungeonGenerator : MonoBehaviour
 
             // 둘다 다른 상황 ==> 둘중 한 방향을 선택
 
-            while (start != end)
+            while (true)
             {
                 int dirZ = end.z == start.z ? 0 : end.z - start.z > 0 ? 1 : -1;
                 int dirX = end.x == start.x ? 0 : end.x - start.x > 0 ? 1 : -1;
-
+ 
                 if (dirZ == 0)
                     start.x += dirX;
                 
@@ -156,14 +154,19 @@ public class DungeonGenerator : MonoBehaviour
                         start.z += dirZ;
                 }
 
+                if (start == end)
+                    break;
 
-                GameObject floor1 = Instantiate(_floor.prefab, start*8 - new Vector3(8, 0, 8), Quaternion.identity);
-                GameObject floor2 = Instantiate(_floor.prefab, start*8 - new Vector3(4, 0, 8), Quaternion.identity);
-                GameObject floor3 = Instantiate(_floor.prefab, start*8 - new Vector3(8, 0, 4), Quaternion.identity);
-                GameObject floor4 = Instantiate(_floor.prefab, start*8 - new Vector3(4, 0, 4), Quaternion.identity); 
+                if (visited.Contains(start))
+                    continue;
+
+                visited.Add(start);
+
+                GameObject floor1 = Instantiate(_floor.prefab, start*8 - new Vector3(_floor.sizeX, 0, _floor.sizeZ), Quaternion.identity);
+            
             }
         } 
-    }
+    } 
 
     private void Union(int[] parents, int a, int b)
     {
