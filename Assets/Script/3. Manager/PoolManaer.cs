@@ -96,11 +96,8 @@ public class PoolManager : IManager
         _pool.Add(original.name, pool);
     }
 
-    private void Release(GameObject obj)
+    public void Release(GameObject obj)
     {
-        if (!obj.TryGetComponent(out IPoolable poolable))
-            return;
-
         string name = obj.gameObject.name;
         if (_pool.ContainsKey(name) == false)
         {
@@ -131,7 +128,7 @@ public class PoolManager : IManager
             CreatePool(original);
 
         GameObject obj = _pool[original.name].Pop(parent);
-        obj.GetComponent<IPoolable>().Initialize(obj => Release(obj));
+        obj.GetComponent<IPoolable>()?.Initialize(obj => Release(obj)); 
         // obj.SetActive(false); 
         return obj;
     }

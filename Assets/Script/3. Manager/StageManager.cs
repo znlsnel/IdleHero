@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,19 +7,25 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class StageManager : IManager
-{
-    private List<GameObject> _monsters = new List<GameObject>();
+{    private List<GameObject> _monsters = new List<GameObject>();
     private DungeonGenerator dungeonGenerator;
     private PlayerController playerController;
     public List<GameObject> GetMonsters()=> _monsters;
 
+    public int currentStage = 1; 
+
+    public event Action OnStageClear;
+    public event Action OnChangeStage;
+
     public void Init()
     {  
+        OnStageClear = null; 
         dungeonGenerator = GameObject.FindFirstObjectByType<DungeonGenerator>();
         playerController = GameObject.FindFirstObjectByType<PlayerController>();
+
+        StageClear();
     }
     
-
     public void Clear()
     {
  
@@ -28,8 +35,6 @@ public class StageManager : IManager
     {
         Managers.Instance.StartCoroutine(SpawnMonsterCoroutine(delay, count));
     } 
-
-
     private IEnumerator SpawnMonsterCoroutine(float delay, int count) 
     { 
         yield return new WaitForSeconds(delay);
@@ -65,9 +70,25 @@ public class StageManager : IManager
  
         playerController.SetStageMonster(_monsters); 
     } 
- 
     private void UnregisterMonster(GameObject monster)
     {
         _monsters.Remove(monster);
+
+        if (_monsters.Count == 0)
+        {
+            StageClear();
+        }
+    }
+ 
+    private void StageClear()
+    {
+        dungeonGenerator.GenerateDungeon(); 
+        Managers.Player.transform.position = new Vector3(0, 0, 4);
+        OnStageClear?.Invoke();
+
+        Managers.UI.ShowPopupUI<SkillPopupUI>();   
+
+        OnChangeStage?.Invoke();  
+        currentStage++;
     }
 } 

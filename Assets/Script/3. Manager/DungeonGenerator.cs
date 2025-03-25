@@ -23,13 +23,10 @@ public class DungeonGenerator : MonoBehaviour
     // Build Elements
     [SerializeField] private BuildElements _floor;
     [SerializeField] private BuildElements railing;
-    [SerializeField] private BuildElements _stair;
-    [SerializeField] private BuildElements _corridor;
 
     // Dungeon Size
     [SerializeField] private Vector2 _dungeonSize;
     [SerializeField] private int _dungeonDepth;
-    [SerializeField] private bool autoBakeNavMesh = true;
     
     // NavMesh 
     [SerializeField] private LayerMask _navMeshLayer;
@@ -39,7 +36,15 @@ public class DungeonGenerator : MonoBehaviour
     private List<Vector3> _nodes = new List<Vector3>();
     private List<(int, int)> _edges = new List<(int, int)>();
     
+    private List<GameObject> _activeObjects = new List<GameObject>();
+
     void Awake() 
+    {
+        navMeshSurface = gameObject.GetOrAddComponent<NavMeshSurface>();
+    } 
+
+ 
+    public void GenerateDungeon()
     {
         if(Random.Range(0, 2) == 0)
         {
@@ -47,16 +52,8 @@ public class DungeonGenerator : MonoBehaviour
             _dungeonSize.x = _dungeonSize.y;
             _dungeonSize.y = temp; 
         }
-        
 
-
-        navMeshSurface = gameObject.GetOrAddComponent<NavMeshSurface>();
-        GenerateDungeon();
-    }
-
- 
-    public void GenerateDungeon()
-    {
+        ClearDungeon();
         // 던전 생성 로직
         // 노드 생성
         CreateNode();
@@ -75,9 +72,21 @@ public class DungeonGenerator : MonoBehaviour
 
     }
 
+    private void ClearDungeon()
+    {
+        foreach (var obj in _activeObjects)
+            Managers.Pool.Release(obj);
+ 
+        _activeObjects.Clear();
+        _nodes.Clear(); 
+        _edges.Clear();
+    }
+
     private IEnumerator BakeNavMesh()
     {
+        NavMesh.RemoveAllNavMeshData();
         yield return new WaitForSeconds(0.1f);
+
         navMeshSurface.layerMask = _navMeshLayer;    
         navMeshSurface.BuildNavMesh();
 
@@ -116,8 +125,11 @@ public class DungeonGenerator : MonoBehaviour
 
         foreach (var node in _nodes)
         {
-            GameObject floor1 = Instantiate(_floor.prefab, node*8, Quaternion.identity);
-            floor1.transform.SetParent(transform, false);
+            GameObject obj = Managers.Pool.Get(_floor.prefab, transform);
+
+            obj.transform.position = node * 8;
+            obj.transform.SetParent(transform, false);
+            _activeObjects.Add(obj);
         }
     }
 
@@ -204,8 +216,10 @@ public class DungeonGenerator : MonoBehaviour
 
                 visited.Add(start);
 
-                GameObject floor1 = Instantiate(_floor.prefab, start*8, Quaternion.identity);
-            floor1.transform.SetParent(transform, false);
+                GameObject obj = Managers.Pool.Get(_floor.prefab, transform);
+                obj.transform.position = start * 8;
+                obj.transform.SetParent(transform, false);
+                _activeObjects.Add(obj); 
 
                 _nodes.Add(start); 
             }
@@ -228,32 +242,45 @@ public class DungeonGenerator : MonoBehaviour
             // 왼쪽에 다른 노드가 있는가?
             if (!nodeHash.Contains(new Vector2(_nodes[i].x - 1, _nodes[i].z)))
             {
-                var go = Instantiate(railing.prefab, curNode + new Vector3(-(_floor.sizeX/2), 0, _floor.sizeZ/2), Quaternion.identity); 
-                go.transform.eulerAngles = new Vector3(0, 90, 0);
-                go.transform.SetParent(transform, false);
+                GameObject obj = Managers.Pool.Get(railing.prefab, transform);
+                obj.transform.position = curNode + new Vector3(-(_floor.sizeX/2), 0, _floor.sizeZ/2);
+                obj.transform.eulerAngles = new Vector3(0, 90, 0);
+                obj.transform.SetParent(transform, false);
+
+                _activeObjects.Add(obj);
             }
 
             // 오른쪽에 다른 노드가 있는가? 
             if (!nodeHash.Contains(new Vector2(_nodes[i].x + 1, _nodes[i].z)))
             {
-                var go = Instantiate(railing.prefab, curNode + new Vector3(_floor.sizeX/2, 0, _floor.sizeZ/2), Quaternion.identity); 
-                go.transform.eulerAngles = new Vector3(0, -90, 0);
-                go.transform.SetParent(transform, false);
+                GameObject obj = Managers.Pool.Get(railing.prefab, transform);
+                obj.transform.position = curNode + new Vector3(_floor.sizeX/2, 0, _floor.sizeZ/2);
+                obj.transform.eulerAngles = new Vector3(0, -90, 0);
+                obj.transform.SetParent(transform, false);
+
+                _activeObjects.Add(obj);
             }
 
             // 위에 다른 노드가 있는가?
             if (!nodeHash.Contains(new Vector2(_nodes[i].x, _nodes[i].z + 1)))
             {
-                var go = Instantiate(railing.prefab, curNode + new Vector3(0, 0, _floor.sizeZ), Quaternion.identity); 
-                go.transform.eulerAngles = new Vector3(0, 180, 0);
-                go.transform.SetParent(transform, false);
+                GameObject obj = Managers.Pool.Get(railing.prefab, transform);
+                obj.transform.position = curNode + new Vector3(0, 0, _floor.sizeZ);
+                obj.transform.eulerAngles = new Vector3(0, 180, 0);
+                obj.transform.SetParent(transform, false);
+
+                _activeObjects.Add(obj);
             }
  
             // 아래에 다른 노드가 있는가?
             if (!nodeHash.Contains(new Vector2(_nodes[i].x, _nodes[i].z - 1)))
             {
-                var go = Instantiate(railing.prefab, curNode, Quaternion.identity);  
-                go.transform.SetParent(transform, false);
+                GameObject obj = Managers.Pool.Get(railing.prefab, transform);
+                obj.transform.position = curNode;
+                obj.transform.eulerAngles = new Vector3(0, 0, 0);
+                obj.transform.SetParent(transform, false);
+
+                _activeObjects.Add(obj);
             }
         } 
 

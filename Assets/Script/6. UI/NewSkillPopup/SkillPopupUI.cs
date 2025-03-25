@@ -61,10 +61,18 @@ public class SkillPopupUI : UI_Popup
         for (int i = 0; i < _skillButtons.Count; i++)
             _skillButtons[i].SetSelected(i == index); 
          
-    }
+    } 
     private void DecideSkill(int index)
     {
-        _playerStatHandler.AddSkill(_selectedSkills[index]); 
+        _playerStatHandler.AddSkill(_selectedSkills[index]);
+        foreach (string skillName in _selectedSkills[index].EffectPrefab)
+        {
+            GameObject skill =Managers.Resource.Load<GameObject>($"Skill/{skillName}");
+            if (skill != null)
+                Instantiate(skill); 
+        } 
+        
+        
         ClosePopupUI();
     }
     private void LoadRandomSkills()

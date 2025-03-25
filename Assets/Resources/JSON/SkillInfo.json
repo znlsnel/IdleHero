@@ -97,7 +97,7 @@
     {
       "key": 1007,
       "Name": "Darkmage",
-      "Description": "플레이어 주변을 도는 검은 구체를 생성합니다",
+      "Description": "공격시 일정 확률로 작은 폭발을 만듭니다",
       "Stat": [
         0
       ],
@@ -105,14 +105,14 @@
         0
       ],
       "EffectPrefab": [
-        "None"
+        "Darkmage"
       ],
       "Image": "Darkmage"
     },
     {
       "key": 1008,
       "Name": "FlameBurst",
-      "Description": "몬스터 공격시 불꽃이 생성되며 주변 몬스터들에게 데미지를 줍니다",
+      "Description": "근처의 적들에게 지속 데미지를 주는 화염 생성",
       "Stat": [
         0
       ],
@@ -120,7 +120,7 @@
         0
       ],
       "EffectPrefab": [
-        "None"
+        "FlameBurst"
       ],
       "Image": "FlameBurst"
     },
@@ -150,7 +150,7 @@
         0
       ],
       "EffectPrefab": [
-        "None"
+        "Paladin"
       ],
       "Image": "Paladin"
     },
@@ -180,7 +180,7 @@
         0
       ],
       "EffectPrefab": [
-        "None"
+        "Sorcerer"
       ],
       "Image": "Sorcerer"
     },
@@ -202,7 +202,7 @@
     {
       "key": 1014,
       "Name": "Wizard",
-      "Description": "공격시 30%의 메테오가 발사됩니다",
+      "Description": "플레이어의 공격이 30%의 확률로 폭발데미지를 줍니다",
       "Stat": [
         0
       ],
@@ -210,7 +210,7 @@
         0
       ],
       "EffectPrefab": [
-        "None"
+        "Wizard"
       ],
       "Image": "Wizard"
     }

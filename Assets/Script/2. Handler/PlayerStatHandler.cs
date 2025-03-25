@@ -23,7 +23,7 @@ public class PlayerStatHandler
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
         stats[(int)EStat.AttackRange] = 3f;  
-        stats[(int)EStat.Damage] = 1f; 
+        stats[(int)EStat.Damage] = 10f; 
         stats[(int)EStat.AttackRate] = 1f;
         stats[(int)EStat.MoveSpeed] = 10f;
         stats[(int)EStat.ManaRecoveryRate] = 1f;

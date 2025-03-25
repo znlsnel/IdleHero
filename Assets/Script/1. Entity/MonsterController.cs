@@ -73,6 +73,7 @@ public class MonsterController : BattleObject, IPoolable
     {
         LocateNavMeshPosition();
         SetState(MonsterState.Idle); 
+        
         currentHealth = monsterSO.MaxHealth;
         lastAttackTime = Time.time;
         isDead = false;
@@ -193,6 +194,8 @@ public class MonsterController : BattleObject, IPoolable
     { 
         agent.isStopped = false;
         rigidbody.velocity *= 0.1f;
+
+        transform.LookAt(player.transform);
 
         // 공격할 수 없다면 추적 모드로 변환
         if (!IsAttackable(DistanceToPlayer))

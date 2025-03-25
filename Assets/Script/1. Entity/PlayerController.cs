@@ -5,6 +5,7 @@ using System.Linq;
 using static DesignEnums;
 using System.Collections;
 using System.ComponentModel;
+using System;
 
 public enum EPlayerState
 {
@@ -33,12 +34,14 @@ public class PlayerController : BattleObject
 
     private GameObject currentTarget; 
 
- 
     // Properties
     private EPlayerState currentState = EPlayerState.Idle;
     private float attackRange => playerStatHandler.GetStat(EStat.AttackRange);
 
-    void Awake()
+    // Event Action
+    public event Action OnPlayerAttack;
+
+    private void Awake()
     {
         targetSensorHandler = GetComponentInChildren<TargetSensorHandler>(); 
         
@@ -51,15 +54,25 @@ public class PlayerController : BattleObject
         agent.enabled = false;
 
         Invoke(nameof(Init), 1.0f);  
+    }
+    private void Start()
+    {
+        Managers.Stage.OnStageClear += () =>
+        {
+            targetSensorHandler.Clear();
+        };
+    }
+    private void Update()
+    {
+        if (agent.enabled && agent.isOnNavMesh)
+            UpdateState();
     } 
-
+    
     private void Init()
     {
         agent.enabled = true;
         agent.speed = playerStatHandler.GetStat(EStat.MoveSpeed);
     }
-
-    // Stat
 
     public override void OnDamage(float damage)
     { 
@@ -72,13 +85,12 @@ public class PlayerController : BattleObject
         { 
             target.GetComponent<BattleObject>()?.OnDamage(playerStatHandler.GetStat(EStat.Damage));
         }
+        OnPlayerAttack?.Invoke();
     }
 
-    private void Update()
-    {
-        if (agent.enabled && agent.isOnNavMesh)
-            UpdateState();
-    } 
+ 
+
+    #region State Pattern
     public void SetState(EPlayerState state)
     {
         currentState = state;
@@ -143,20 +155,22 @@ public class PlayerController : BattleObject
 
         if (!isAttackable) 
             SetState(EPlayerState.Idle);
+
         rigidbody.velocity *= 0.1f;
-         
     }
 
     public void OnDeathState()
     {       
         animationHandler.SetDeathHash(true);
     }
- 
+    #endregion
+    
+    #region Utility
     private bool IsAttackable()
     {
+
         return monsters != null && monsters.Count > 0 && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange;
     }
-
     public void SetStageMonster(List<GameObject> monsters)
     {
         this.monsters = monsters; 
@@ -165,7 +179,6 @@ public class PlayerController : BattleObject
 
         StartCoroutine(UpdateTargetMonster());
     }
-
     private IEnumerator UpdateTargetMonster()
     {
         while(true)
@@ -182,6 +195,10 @@ public class PlayerController : BattleObject
             yield return new WaitForSeconds(0.3f); 
         }
     }
+    
+    #endregion
+    
+
 }
 
 

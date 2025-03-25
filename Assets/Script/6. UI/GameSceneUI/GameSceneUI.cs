@@ -9,6 +9,7 @@ public class GameSceneUI : UI_Scene
     [SerializeField] private Slider healthSlider;
     [SerializeField] private TextMeshProUGUI healthRateText;
     [SerializeField] private TextMeshProUGUI coinsText;
+    [SerializeField] private TextMeshProUGUI stageText;
 
     private PlayerStatHandler playerStatHandler;
 
@@ -18,11 +19,15 @@ public class GameSceneUI : UI_Scene
         playerStatHandler = Managers.Player.GetComponent<PlayerController>().playerStatHandler;
         playerStatHandler.OnCheangeValue += UpdateUI; 
         UpdateUI();
+
+        Managers.Stage.OnChangeStage += SetStageText; 
+        SetStageText();
     } 
  
     private void OnDestroy() 
     {
-       // playerStatHandler.OnCheangeValue -= UpdateUI;
+        playerStatHandler.OnCheangeValue -= UpdateUI; 
+        Managers.Stage.OnChangeStage -= SetStageText;
     }
 
     private void UpdateUI()
@@ -32,6 +37,11 @@ public class GameSceneUI : UI_Scene
         coinsText.text = playerStatHandler.Coins.ToString();
     
         float temp = healthSlider.value / healthSlider.maxValue;
-        healthRateText.text = $"{(int)(temp * 100)}%";    
+        healthRateText.text = $"{(int)(temp * 100)}%";
+    }
+
+    private void SetStageText()
+    {
+        stageText.text = $"Stage: {Managers.Stage.currentStage}"; 
     }
 }

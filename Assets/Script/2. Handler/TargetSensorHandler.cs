@@ -9,15 +9,24 @@ public class TargetSensorHandler : MonoBehaviour
     private HashSet<GameObject> targets = new HashSet<GameObject>();
     public HashSet<GameObject> OverlabTargets => targets;
    
-    void OnTriggerEnter(Collider other)
+   private void OnEnable()
+   {
+        Clear();
+   }
+
+   public void Clear()
+   {
+        targets.Clear();  
+   }
+    private void OnTriggerEnter(Collider other)
     {
         if (targetLayer == (targetLayer | (1 << other.gameObject.layer)))
         {
             targets.Add(other.gameObject);
-        }
+        } 
     }
 
-    void OnTriggerExit(Collider other) 
+    private void OnTriggerExit(Collider other) 
     {
         if (targetLayer == (targetLayer | (1 << other.gameObject.layer)))
         {
