@@ -98,7 +98,8 @@ public class DungeonGenerator : MonoBehaviour
     }
     public Vector3 GetRandomPosition()
     {
-        return _nodes[Random.Range(1, _nodes.Count)] * 8 + new Vector3(0, 0, 4);  
+        Vector3 randomPos = new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3));  
+        return _nodes[Random.Range(1, _nodes.Count)] * 8 + new Vector3(0, 0, 4) + randomPos;  
     }
 
     private void CreateNode()

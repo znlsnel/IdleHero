@@ -8,7 +8,7 @@ public class DamageOverTime : MonoBehaviour
     [SerializeField] private int Damage = 10;
     [SerializeField] private int interval = 1;
     [SerializeField] private TargetSensor targetSensor;
-
+    [SerializeField] private GameObject _attackParticle;
     private void Start()
     {
         targetSensor = gameObject.GetOrAddComponent<TargetSensor>();
@@ -19,14 +19,14 @@ public class DamageOverTime : MonoBehaviour
     {
         StopCoroutine(DamageOverTimeCoroutine()); 
     }
-
+ 
     private IEnumerator DamageOverTimeCoroutine()
     {
         while(true)
         {
             foreach(var monster in targetSensor.Monsters)
             {
-                monster.OnDamage(Damage);
+                monster.OnDamage(Damage, _attackParticle);
             }
             yield return new WaitForSeconds(interval);
         }

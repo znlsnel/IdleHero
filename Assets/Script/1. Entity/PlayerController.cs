@@ -22,7 +22,7 @@ public enum EPlayerState
 public class PlayerController : BattleObject
 {
     [field: SerializeField] public PlayerStatData playerStatData { get; private set; } = new PlayerStatData();
-
+    [SerializeField] private GameObject _attackParticle;
     // Component
     public PlayerAnimationHandler animationHandler {get; private set;}
     private TargetSensorHandler targetSensorHandler;
@@ -79,7 +79,7 @@ public class PlayerController : BattleObject
         agent.speed = playerStatData.GetStat(EStat.MoveSpeed);
     }
  
-    public override void OnDamage(float damage)
+    public override void OnDamage(float damage, GameObject particle)
     { 
         if (Random.Range(0, 100) < playerStatData.GetStat(EStat.EvasionRate))
             return;
@@ -87,6 +87,9 @@ public class PlayerController : BattleObject
         float armorDamage = damage * (playerStatData.GetStat(EStat.Armor) * 0.01f);
         damage = Mathf.Clamp(damage, damage / 2, damage - armorDamage); 
         playerStatData.SubtractHealth((int)damage);  
+
+        var go = Instantiate(particle, transform.position, Quaternion.identity);
+        Destroy(go, 2.5f);
     }
   
     public override void OnAttack()
@@ -100,12 +103,12 @@ public class PlayerController : BattleObject
                 continue; 
 
 
-            int damage = playerStatData.GetStat(EStat.Damage);
+            float damage = playerStatData.GetStat(EStat.Damage);
             if (Random.Range(0, 100) < playerStatData.GetStat(EStat.CriticalHitRate))
                 damage *= 2;
 
 
-            target.GetComponent<BattleObject>()?.OnDamage(damage);
+            target.GetComponent<BattleObject>()?.OnDamage(damage, _attackParticle);
         }
         OnPlayerAttack?.Invoke();
     }

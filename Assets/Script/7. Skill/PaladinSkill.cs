@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class PaladinSkill : MonoBehaviour
 {
+    [SerializeField] private GameObject _attackParticle;
     private GameObject player;
     private float _speed = 180f;
-    private float _distance = 3f;
+    private float _distance = 2f; 
     private float _angle = 0f; // 현재 각도
     private float _yOffset = 2f;
     private int Damage = 10;  
+    
 
     private void Start()
     {
@@ -38,7 +40,7 @@ public class PaladinSkill : MonoBehaviour
     {
         if(other.TryGetComponent(out MonsterController monster))
         { 
-            monster.OnDamage(Damage);
+            monster.OnDamage(Damage, _attackParticle);
         }
     }
 

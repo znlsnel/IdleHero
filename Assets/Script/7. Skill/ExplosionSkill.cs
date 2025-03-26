@@ -8,6 +8,8 @@ public class ExplosionSkill : MonoBehaviour
     [SerializeField] private GameObject particle;
     [SerializeField, Range(0, 100)] private int triggerChance = 100;
     [SerializeField] private TargetSensor targetSensor;
+    [SerializeField] private GameObject _attackParticle;
+
     private GameObject player; 
     private void Start()
     {
@@ -30,7 +32,7 @@ public class ExplosionSkill : MonoBehaviour
         go.transform.position = position;
         foreach(var monster in targetSensor.Monsters)
         {
-            monster.OnDamage(Damage); 
+            monster.OnDamage(Damage, particle); 
         }
 
         StartCoroutine(Release(go));

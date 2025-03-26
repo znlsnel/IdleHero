@@ -75,6 +75,8 @@ MonoBehaviour:
   Damage: 10
   interval: 1
   targetSensor: {fileID: 8543244608749881867}
+  _attackParticle: {fileID: 6021631121719958748, guid: c0287ce4ecf06fc4ab0fe12b5213f3be,
+    type: 3}
 --- !u!135 &3510780005417599326
 SphereCollider:
   m_ObjectHideFlags: 0

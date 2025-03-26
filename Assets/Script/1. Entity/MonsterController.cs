@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 public enum MonsterState
 {
@@ -14,7 +15,7 @@ public enum MonsterState
 
 public abstract class BattleObject : MonoBehaviour
 {
-    public abstract void OnDamage(float damage);
+    public abstract void OnDamage(float damage, GameObject particle); 
     public abstract void OnAttack(); 
 }
 
@@ -29,7 +30,7 @@ public class MonsterController : BattleObject, IPoolable
 
     // Datas
     [SerializeField] private MonsterSO monsterSO;
-
+    [SerializeField] private GameObject _attackParticle;
     // Components
     private TargetSensorHandler targetSensorHandler;
     private Rigidbody rigidbody;
@@ -111,7 +112,7 @@ public class MonsterController : BattleObject, IPoolable
     
     #endregion
     #region Animation Event
-    public override void OnDamage(float damage)
+    public override void OnDamage(float damage, GameObject particle)
     {
         if (currentState == MonsterState.Death)
             return;
@@ -124,16 +125,18 @@ public class MonsterController : BattleObject, IPoolable
 
         DamageUI damageUI = Managers.UI.ShowSceneChildUI<DamageUI>();
         damageUI.InitText(damage.ToString(), gameObject);  
+        var go = Instantiate(particle, transform.position, Quaternion.identity); 
+        Destroy(go, 2.5f);
 
         Destroy(damageUI.gameObject, 1.5f); 
     }
     public override void OnAttack()
-    {
+    { 
         foreach (var target in targetSensorHandler.OverlabTargets)
         {
             if (target.TryGetComponent(out PlayerController playerController))
             {
-                playerController.OnDamage(AttackDamage); 
+                playerController.OnDamage(AttackDamage, _attackParticle); 
             }
         }
     }

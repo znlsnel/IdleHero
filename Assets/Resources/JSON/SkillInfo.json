@@ -50,21 +50,6 @@
       "Image": "Ranger"
     },
     {
-      "key": 1004,
-      "Name": "BlessingOfAether",
-      "Description": "마나를 회복률이 증가합니다",
-      "Stat": [
-        4
-      ],
-      "StatValue": [
-        10
-      ],
-      "EffectPrefab": [
-        "None"
-      ],
-      "Image": "BlessingOfAether"
-    },
-    {
       "key": 1005,
       "Name": "BlessingOfAgility",
       "Description": "공격 회피율이 증가합니다",
@@ -157,7 +142,7 @@
     {
       "key": 1011,
       "Name": "Priest",
-      "Description": "체력을 회복률이 증가합니다",
+      "Description": "체력 회복률이 증가합니다",
       "Stat": [
         5
       ],

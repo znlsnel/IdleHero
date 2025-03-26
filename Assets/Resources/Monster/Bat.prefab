@@ -1359,6 +1359,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterSO: {fileID: 11400000, guid: ebcc193fda385a24a92e55724a325dc9, type: 2}
+  _attackParticle: {fileID: 4186470608034871016, guid: 419d6ca370932a142a195479044cb169,
+    type: 3}
 --- !u!54 &-7196844909206915044
 Rigidbody:
   m_ObjectHideFlags: 0

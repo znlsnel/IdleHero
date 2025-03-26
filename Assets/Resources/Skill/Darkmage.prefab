@@ -69,4 +69,7 @@ MonoBehaviour:
   Damage: 10
   particle: {fileID: 2997075026652233827, guid: dfc792b0cad976f47ab08069107c2b67,
     type: 3}
-  triggerChance: 100
+  triggerChance: 50
+  targetSensor: {fileID: 0}
+  _attackParticle: {fileID: 1157170509065276573, guid: a769c9d2e74331246a300e6fba225910,
+    type: 3}

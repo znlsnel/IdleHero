@@ -11,14 +11,14 @@ public class PlayerStatData
     private float[] stats;
 
     // 플레이어 기본 속성
-    [SerializeField] public int MaxHealth {get; set;} = 100;
-    [SerializeField] public int Health {get; set;} = 100; 
-    [SerializeField] public int Experience {get; set;} = 0;
-    [SerializeField] public int MaxExperience {get; set;} = 100;
-    [SerializeField] public int Coins {get; set;} = 0; 
+    [SerializeField] public float MaxHealth {get; set;} = 100;
+    [SerializeField] public float Health {get; set;} = 100; 
+    [SerializeField] public float Experience {get; set;} = 0;
+    [SerializeField] public float MaxExperience {get; set;} = 100;
+    [SerializeField] public float Coins {get; set;} = 0; 
  
     public event Action OnCheangeValue;
-
+ 
     public PlayerStatData()
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
@@ -78,7 +78,7 @@ public class PlayerStatData
         OnCheangeValue?.Invoke();
     }
 
-    public int GetStat(EStat type)
+    public float GetStat(EStat type)
     {
         float stat = stats[(int)type];
 
@@ -98,10 +98,10 @@ public class PlayerStatData
             }
         }
 
-        return (int)(stat * (1 + rate * 0.01f));  
+        return stat * (1 + rate * 0.01f);  
     }
 
-    public void AddHealth(int amount)
+    public void AddHealth(float amount)
     {
         Health += amount;
         if (Health > MaxHealth)
@@ -111,9 +111,9 @@ public class PlayerStatData
         OnCheangeValue?.Invoke();
     }
 
-    public void SubtractHealth(int amount)
+    public void SubtractHealth(float amount)
     {
-        Health -= amount;
+        Health -= amount; 
         if (Health < 0)
             Health = 0;
 
@@ -121,14 +121,14 @@ public class PlayerStatData
         OnCheangeValue?.Invoke();
     }
 
-    public void IncreaseCoins(int amount) 
+    public void IncreaseCoins(float amount) 
     {
         Coins += amount;
         Debug.Log($"Coins increased: {Coins}");
         OnCheangeValue?.Invoke();
     }
-
-    public void DecreaseCoins(int amount)
+ 
+    public void DecreaseCoins(float amount)
     {
         Coins -= amount;
         Debug.Log($"Coins decreased: {Coins}"); 
