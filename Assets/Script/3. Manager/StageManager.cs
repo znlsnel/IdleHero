@@ -12,7 +12,7 @@ public class StageManager : IManager
     private PlayerController playerController;
     public List<GameObject> GetMonsters()=> _monsters;
 
-    public int currentStage = 1; 
+    public int currentStage = 0; 
 
     public event Action OnStageClear;
     public event Action OnChangeStage;
@@ -88,7 +88,7 @@ public class StageManager : IManager
 
         Managers.UI.ShowPopupUI<SkillPopupUI>();   
 
-        OnChangeStage?.Invoke();  
         currentStage++;
+        OnChangeStage?.Invoke();   
     }
 } 

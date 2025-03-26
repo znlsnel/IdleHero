@@ -33,7 +33,7 @@ public class PaladinSkill : MonoBehaviour
         // 자전 (공전과 같은 속도로)
         transform.Rotate(Vector3.up, _speed * Time.deltaTime* 2);
     } 
-
+ 
     void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out MonsterController monster))

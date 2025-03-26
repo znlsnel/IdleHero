@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -73,7 +74,11 @@ public class SkillPopupUI : UI_Popup
                 
         } 
         
-        
+        GameObject go = Managers.Resource.Instantiate("Particle/LevelUp4");
+        go.transform.SetParent(Managers.Player.transform, false);
+        go.transform.localPosition = Vector3.up * 0.3f;   
+        Destroy(go, 2.5f); 
+
         ClosePopupUI();
     }
     private void LoadRandomSkills()
