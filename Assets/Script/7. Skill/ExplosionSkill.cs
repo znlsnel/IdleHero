@@ -1,19 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static DesignEnums;
 
 public class ExplosionSkill : MonoBehaviour
 {
-    [SerializeField] private int Damage = 10;
+    [SerializeField] private float Damage = 10;
     [SerializeField] private GameObject particle;
     [SerializeField, Range(0, 100)] private int triggerChance = 100;
     [SerializeField] private TargetSensor targetSensor;
     [SerializeField] private GameObject _attackParticle;
 
     private GameObject player; 
+    private PlayerStatData playerStatData;
     private void Start()
     {
         player = Managers.Player.gameObject;
+        playerStatData = player.GetComponent<PlayerController>().playerStatData;
         player.GetComponent<PlayerController>().OnPlayerAttack += () =>Active();
         targetSensor = gameObject.GetOrAddComponent<TargetSensor>();
     }
@@ -32,9 +35,11 @@ public class ExplosionSkill : MonoBehaviour
         go.transform.position = position;
         foreach(var monster in targetSensor.Monsters)
         {
-            monster.OnDamage(Damage, particle); 
+            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, particle); 
         }
 
+        Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.5f);
+ 
         StartCoroutine(Release(go));
     }
 

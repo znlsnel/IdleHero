@@ -76,6 +76,7 @@ public class StageManager : IManager
 
         if (_monsters.Count == 0)
         {
+            Managers.Sound.Play("Effect/SFX_Cash_Register_Buy_Click_1", 0.5f);  
             StageClear();
         }
     }

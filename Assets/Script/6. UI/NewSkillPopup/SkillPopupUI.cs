@@ -59,6 +59,8 @@ public class SkillPopupUI : UI_Popup
             return;
         }
         
+        Managers.Sound.Play("UI/SFX_UI_Button_Click_Open_3",1f);   
+
         for (int i = 0; i < _skillButtons.Count; i++)
             _skillButtons[i].SetSelected(i == index); 
          
@@ -74,6 +76,7 @@ public class SkillPopupUI : UI_Popup
                 
         } 
         
+        Managers.Sound.Play("Effect/SFX_Powerup_Bright_1", 1f); 
         GameObject go = Managers.Resource.Instantiate("Particle/LevelUp4");
         go.transform.SetParent(Managers.Player.transform, false);
         go.transform.localPosition = Vector3.up * 0.3f;   

@@ -72,7 +72,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90d0c01a6528cfd40a2776d9dbb772a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 10
+  Damage: 0.3
   interval: 1
   targetSensor: {fileID: 8543244608749881867}
   _attackParticle: {fileID: 6021631121719958748, guid: c0287ce4ecf06fc4ab0fe12b5213f3be,

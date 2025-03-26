@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
+using Random = UnityEngine.Random;
 
 public enum MonsterState
 {
@@ -128,6 +129,7 @@ public class MonsterController : BattleObject, IPoolable
         var go = Instantiate(particle, transform.position, Quaternion.identity); 
         Destroy(go, 2.5f);
 
+       
         Destroy(damageUI.gameObject, 1.5f); 
     }
     public override void OnAttack()

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6103488162435455032}
   - component: {fileID: 7599957776981022865}
   - component: {fileID: 4576289388950041763}
+  - component: {fileID: 8666805989275205620}
   m_Layer: 0
   m_Name: Wizard
   m_TagString: Untagged
@@ -66,10 +67,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23aa3387333c2144a01602133f891da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 100
+  Damage: 3
   particle: {fileID: 7456189446365218041, guid: 3f219f3c338014b4ea79f2295c6a5a46,
     type: 3}
   triggerChance: 30
-  targetSensor: {fileID: 0}
+  targetSensor: {fileID: 8666805989275205620}
   _attackParticle: {fileID: 4186470608034871016, guid: 104d74e12646dae47a090f8bc732aeb4,
     type: 3}
+--- !u!114 &8666805989275205620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968878328397750856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2799d174cea56f740be411d82db8440d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

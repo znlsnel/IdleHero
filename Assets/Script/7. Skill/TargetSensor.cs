@@ -11,7 +11,7 @@ public class TargetSensor : MonoBehaviour
         {
             monster.onDie += UnRegister; 
             monsters.Add(monster);
-        } 
+        }  
     } 
 
     private void UnRegister(GameObject monster)

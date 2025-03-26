@@ -1,21 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static DesignEnums;
 
 public class PaladinSkill : MonoBehaviour
 {
+    [SerializeField] private float Damage = 1.2f;  
     [SerializeField] private GameObject _attackParticle;
+    [SerializeField] private float _speed = 180f;
+    [SerializeField] private float _distance = 2f;  
     private GameObject player;
-    private float _speed = 180f;
-    private float _distance = 2f; 
     private float _angle = 0f; // 현재 각도
     private float _yOffset = 2f;
-    private int Damage = 10;  
     
-
+    private PlayerStatData playerStatData;
     private void Start()
     {
         player = Managers.Player.gameObject;
+        playerStatData = player.GetComponent<PlayerController>().playerStatData;
     }
 
     public void Update()
@@ -39,9 +41,10 @@ public class PaladinSkill : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out MonsterController monster))
-        { 
-            monster.OnDamage(Damage, _attackParticle);
-        }
+        {  
+            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, _attackParticle); 
+            Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.2f); 
+        } 
     }
 
 

@@ -23,6 +23,7 @@ public class PlayerController : BattleObject
 {
     [field: SerializeField] public PlayerStatData playerStatData { get; private set; } = new PlayerStatData();
     [SerializeField] private GameObject _attackParticle;
+    [SerializeField] private GameObject _criticalParticle;
     // Component
     public PlayerAnimationHandler animationHandler {get; private set;}
     private TargetSensorHandler targetSensorHandler;
@@ -31,16 +32,18 @@ public class PlayerController : BattleObject
 
     // Monster
     private List<GameObject> monsters;
-    public float AttackRange => attackRange; 
-
     private GameObject currentTarget; 
+
 
     // Properties
     private EPlayerState currentState = EPlayerState.Idle;
     private float attackRange => playerStatData.GetStat(EStat.AttackRange);
+    private float footStepTime = 0.3f;  
+    private float lastFootStepTime = 0f;  
 
     // Event Action
     public event Action OnPlayerAttack;
+
 
     private void Awake()
     {
@@ -71,8 +74,18 @@ public class PlayerController : BattleObject
 
         agent.speed = playerStatData.GetStat(EStat.MoveSpeed); 
         targetSensorHandler.transform.localScale = new Vector3(attackRange, attackRange, attackRange);
+        PlayFootStepSound();
     } 
-    
+     
+    private void PlayFootStepSound()
+    {
+        if (Time.time - lastFootStepTime < footStepTime || currentState != EPlayerState.Move)
+            return;
+
+        lastFootStepTime = Time.time;
+        Managers.Sound.Play($"FootStep/SFX_Movement_Footstep_Water_{Random.Range(1, 5)}", 0.5f);
+    }  
+
     private void Init()
     {
         agent.enabled = true;
@@ -94,6 +107,7 @@ public class PlayerController : BattleObject
   
     public override void OnAttack()
     {
+        bool flag = false;
         foreach (var target in targetSensorHandler.OverlabTargets)
         { 
             if (target.TryGetComponent(out MonsterController monsterController) == false)
@@ -102,15 +116,21 @@ public class PlayerController : BattleObject
             if (monsterController.IsDead)
                 continue; 
 
-
+            flag = true;
             float damage = playerStatData.GetStat(EStat.Damage);
-            if (Random.Range(0, 100) < playerStatData.GetStat(EStat.CriticalHitRate))
+            bool isCritical = Random.Range(0, 100) < playerStatData.GetStat(EStat.CriticalHitRate);
+            if (isCritical)
                 damage *= 2;
-
-
-            target.GetComponent<BattleObject>()?.OnDamage(damage, _attackParticle);
+ 
+            target.GetComponent<BattleObject>()?.OnDamage(damage, isCritical ? _criticalParticle : _attackParticle);
         }
         OnPlayerAttack?.Invoke();
+
+        if (flag)
+            Managers.Sound.Play($"Attack/SFX_Confetti_Explosion_{Random.Range(1, 3)}", 1f);    
+        else
+            Managers.Sound.Play($"Attack/SFX_Movement_Swoosh_Fast_{Random.Range(1, 4)}", 0.2f);   
+ 
     }
 
  
