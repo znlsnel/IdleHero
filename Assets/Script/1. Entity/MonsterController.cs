@@ -128,7 +128,7 @@ public class MonsterController : BattleObject, IPoolable
 
         DamageUI damageUI = Managers.UI.ShowSceneChildUI<DamageUI>();
         damageUI.InitText(damage.ToString(), gameObject);  
-        var go = Instantiate(particle, transform.position, Quaternion.identity); 
+        var go = Instantiate(particle, transform.position + Vector3.up * 1.5f, Quaternion.identity);  
         Destroy(go, 2.5f);
 
        

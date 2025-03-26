@@ -125,7 +125,7 @@ public class PlayerController : BattleObject
             }, 2.0f); 
         }
 
-        var go = Instantiate(particle, transform.position, Quaternion.identity);
+        var go = Instantiate(particle, transform.position + Vector3.up * 1.0f, Quaternion.identity);
         Destroy(go, 2.5f);
     }
   
@@ -248,7 +248,17 @@ public class PlayerController : BattleObject
     public void SetStageMonster(List<GameObject> monsters)
     {
         this.monsters = monsters; 
-        this.monsters.Sort((a, b) => Vector3.Distance(transform.position, a.transform.position).CompareTo(Vector3.Distance(transform.position, b.transform.position)));
+        this.monsters.Sort((a, b) => {
+            float distanceA = Vector3.Distance(transform.position, a.transform.position);
+            float distanceB = Vector3.Distance(transform.position, b.transform.position);
+            
+            if (a.GetComponent<MonsterController>().IsDead)
+                distanceA += 1000f;
+            if (b.GetComponent<MonsterController>().IsDead)
+                distanceB += 1000f;
+                
+            return distanceA.CompareTo(distanceB);
+        });
         currentTarget = monsters[0];
 
         StartCoroutine(UpdateTargetMonster());
@@ -259,7 +269,17 @@ public class PlayerController : BattleObject
         {   
             if (monsters != null && monsters.Count > 0)
             {
-                monsters.Sort((a, b) => Vector3.Distance(transform.position, a.transform.position).CompareTo(Vector3.Distance(transform.position, b.transform.position)));
+                monsters.Sort((a, b) => {
+                    float distanceA = Vector3.Distance(transform.position, a.transform.position);
+                    float distanceB = Vector3.Distance(transform.position, b.transform.position);
+                    
+                    if (a.GetComponent<MonsterController>().IsDead)
+                        distanceA += 1000f;
+                    if (b.GetComponent<MonsterController>().IsDead)
+                        distanceB += 1000f;
+                        
+                    return distanceA.CompareTo(distanceB);
+                });
                 currentTarget = monsters[0];
             }
 
