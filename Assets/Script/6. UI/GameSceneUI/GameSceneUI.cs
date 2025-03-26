@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using static DesignEnums;
 
 public class GameSceneUI : UI_Scene
 {
@@ -24,20 +25,13 @@ public class GameSceneUI : UI_Scene
         SetStageText();
     } 
  
-    private void OnDestroy() 
-    {
-        playerStatHandler.OnCheangeValue -= UpdateUI; 
-        Managers.Stage.OnChangeStage -= SetStageText;
-    }
-
     private void UpdateUI()
     {
         healthSlider.value = playerStatHandler.Health; 
-        healthSlider.maxValue = playerStatHandler.MaxHealth;
-        coinsText.text = playerStatHandler.Coins.ToString();
+        healthSlider.maxValue = playerStatHandler.GetStat(EStat.MaxHealth);
+        coinsText.text = playerStatHandler.Coins.ToString(); 
     
-        float temp = healthSlider.value / healthSlider.maxValue;
-        healthRateText.text = $"{(int)(temp * 100)}%";
+        healthRateText.text = $"{playerStatHandler.Health} / {playerStatHandler.GetStat(EStat.MaxHealth)}";
     }
 
     private void SetStageText()

@@ -27,11 +27,11 @@ public class DamageOverTime : MonoBehaviour
  
     private IEnumerator DamageOverTimeCoroutine()
     {
-        while(true)
+        while(true) 
         {
             foreach(var monster in targetSensor.Monsters)
             {
-                monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, _attackParticle);
+                monster.OnDamage(playerStatData.GetStat(EStat.Damage) * (long)Damage, _attackParticle);
                 Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.1f);  
 
             }

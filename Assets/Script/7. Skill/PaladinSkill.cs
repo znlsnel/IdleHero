@@ -40,9 +40,9 @@ public class PaladinSkill : MonoBehaviour
  
     void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent(out MonsterController monster))
+        if(other.TryGetComponent(out MonsterController monster)) 
         {  
-            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, _attackParticle); 
+            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * (long)Damage, _attackParticle); 
             Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.2f); 
         } 
     }

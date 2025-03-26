@@ -35,9 +35,8 @@ public class ExplosionSkill : MonoBehaviour
         go.transform.position = position;
         foreach(var monster in targetSensor.Monsters)
         {
-            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, _attackParticle); 
+            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * (long)Damage, _attackParticle); 
         }
-
         Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.5f);
  
         StartCoroutine(Release(go));

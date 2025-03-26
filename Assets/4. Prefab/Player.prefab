@@ -1987,7 +1987,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbff6df9192c9d14ebe7f5fcf0cea6cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <playerStatData>k__BackingField:
+    _statDataSO: {fileID: 11400000, guid: aea43fc7be83916439a08bb2d3a8af93, type: 2}
   _attackParticle: {fileID: 3347887276389172240, guid: 7a95a551d4e444f42bd0658421346636,
+    type: 3}
+  _criticalParticle: {fileID: 4186470608034871016, guid: 104d74e12646dae47a090f8bc732aeb4,
     type: 3}
 --- !u!54 &8925933749871561146
 Rigidbody:

@@ -24,7 +24,7 @@ public class SkillInfo
     /// <summary>
     /// 옵션
     /// </summary>
-    public List<DesignEnums.Stat> Stat;
+    public List<DesignEnums.EStat> Stat;
 
     /// <summary>
     /// 값 ( % )

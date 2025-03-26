@@ -22,15 +22,16 @@ public enum EPlayerState
 [RequireComponent(typeof(PlayerAnimationHandler))]
 public class PlayerController : BattleObject
 {
-    [field: SerializeField] public PlayerStatData playerStatData { get; private set; } = new PlayerStatData();
+    [field: SerializeField] public PlayerStatData playerStatData { get; private set; } = new PlayerStatData(); 
+    
     [SerializeField] private GameObject _attackParticle;
     [SerializeField] private GameObject _criticalParticle;
     // Component
     public PlayerAnimationHandler animationHandler {get; private set;}
     private TargetSensorHandler targetSensorHandler;
     private NavMeshAgent agent;
-    private Rigidbody rigidbody;
-
+    private Rigidbody rigid;
+ 
     // Monster
     private List<GameObject> monsters;
     private GameObject currentTarget; 
@@ -52,7 +53,7 @@ public class PlayerController : BattleObject
         animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>(); 
         agent = gameObject.GetOrAddComponent<NavMeshAgent>();   
 
-        rigidbody = GetComponent<Rigidbody>();
+        rigid = GetComponent<Rigidbody>();
  
         playerStatData.Init(); 
         
@@ -67,6 +68,7 @@ public class PlayerController : BattleObject
             targetSensorHandler.Clear();
         };
     }
+
     private void Update()
     {
         if (agent.enabled && agent.isOnNavMesh)
@@ -90,7 +92,7 @@ public class PlayerController : BattleObject
     { 
         //agent.Warp(new Vector3(0, 0, 4)); 
         agent.enabled = true; 
-        playerStatData.Health = playerStatData.MaxHealth;
+        playerStatData.Heal(playerStatData.GetStat(EStat.MaxHealth)); 
         agent.speed = playerStatData.GetStat(EStat.MoveSpeed);
         animationHandler.SetDeathHash(false);  
         animationHandler.SetAttackHash(false);    
@@ -99,7 +101,7 @@ public class PlayerController : BattleObject
     }
 
  
-    public override void OnDamage(float damage, GameObject particle) 
+    public override void OnDamage(long damage, GameObject particle) 
     { 
         if (currentState == EPlayerState.Death)
             return;
@@ -107,9 +109,9 @@ public class PlayerController : BattleObject
         if (Random.Range(0, 100) < playerStatData.GetStat(EStat.EvasionRate))
             return;
 
-        float armorDamage = damage * (playerStatData.GetStat(EStat.Armor) * 0.01f);
-        damage = Mathf.Clamp(damage, damage / 2, damage - armorDamage); 
-        playerStatData.SubtractHealth((int)damage);  
+        long armorDamage = (long)(damage * (playerStatData.GetStat(EStat.Armor) * 0.01f));
+        damage = (long)Mathf.Clamp(damage, damage / 2, damage - armorDamage); 
+        playerStatData.Damage((int)damage);  
 
         if (playerStatData.Health <= 0)
         {
@@ -141,7 +143,7 @@ public class PlayerController : BattleObject
                 continue; 
 
             flag = true;
-            float damage = playerStatData.GetStat(EStat.Damage);
+            long damage = playerStatData.GetStat(EStat.Damage);
             bool isCritical = Random.Range(0, 100) < playerStatData.GetStat(EStat.CriticalHitRate);
             if (isCritical)
                 damage *= 2;
@@ -230,7 +232,7 @@ public class PlayerController : BattleObject
         if (!isAttackable) 
             SetState(EPlayerState.Idle);
 
-        rigidbody.velocity *= 0.1f;
+        rigid.velocity *= 0.1f;
     }
 
     public void OnDeathState()

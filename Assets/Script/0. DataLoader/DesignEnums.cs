@@ -8,11 +8,11 @@ public static class DesignEnums
         Damage = 1,
         AttackRate = 2,
         MoveSpeed = 3,
-        ManaRecoveryRate = 4,
-        HealthRecoveryRate = 5,
-        EvasionRate = 6,
-        Armor = 7,
-        AttackRange = 8,
-        CriticalHitRate = 9,
+        HealthRecoveryRate = 4,
+        EvasionRate = 5,
+        Armor = 6,
+        AttackRange = 7,
+        CriticalHitRate = 8,
+        MaxHealth = 9,
     }
 }

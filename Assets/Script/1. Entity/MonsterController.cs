@@ -17,7 +17,7 @@ public enum MonsterState
 
 public abstract class BattleObject : MonoBehaviour
 {
-    public abstract void OnDamage(float damage, GameObject particle); 
+    public abstract void OnDamage(long damage, GameObject particle); 
     public abstract void OnAttack(); 
 }
 
@@ -35,7 +35,6 @@ public class MonsterController : BattleObject, IPoolable
     [SerializeField] private GameObject _attackParticle;
     // Components
     private TargetSensorHandler targetSensorHandler;
-    private Rigidbody rigidbody;
     private NavMeshAgent agent;
     private Animator animator;
 
@@ -44,7 +43,7 @@ public class MonsterController : BattleObject, IPoolable
     private float MoveSpeed => monsterSO.MoveSpeed;
     private float AttackRange => monsterSO.AttackRange;
     private float TraceRange => monsterSO.TraceRange;
-    private float AttackDamage => monsterSO.Damage;
+    private long AttackDamage => monsterSO.Damage;
     private float AttackDelay => monsterSO.AttackDelay; 
     private float DistanceToPlayer => Vector3.Distance(transform.position, player.transform.position);
     public bool IsDead => isDead; 
@@ -63,7 +62,6 @@ public class MonsterController : BattleObject, IPoolable
         agent = gameObject.GetOrAddComponent<NavMeshAgent>(); 
         animator = GetComponentInChildren<Animator>();
         targetSensorHandler = GetComponentInChildren<TargetSensorHandler>();
-        rigidbody = GetComponent<Rigidbody>();
     } 
 
     private void Update()
@@ -114,7 +112,7 @@ public class MonsterController : BattleObject, IPoolable
     
     #endregion
     #region Battle Function
-    public override void OnDamage(float damage, GameObject particle)
+    public override void OnDamage(long damage, GameObject particle)
     {
         if (currentState == MonsterState.Death)
             return;
@@ -123,11 +121,11 @@ public class MonsterController : BattleObject, IPoolable
         if (currentHealth <= 0)
         {
             SetState(MonsterState.Death);
-            Managers.Player.GetComponent<PlayerController>().playerStatData.IncreaseCoins(100); 
+            Managers.Player.GetComponent<PlayerController>().playerStatData.Coins += 100; 
         } 
-
+ 
         DamageUI damageUI = Managers.UI.ShowSceneChildUI<DamageUI>();
-        damageUI.InitText(damage.ToString(), gameObject);  
+        damageUI.InitText( Util.ConvertBigint(damage), gameObject);  
         var go = Instantiate(particle, transform.position + Vector3.up * 1.5f, Quaternion.identity);  
         Destroy(go, 2.5f);
 
@@ -169,8 +167,6 @@ public class MonsterController : BattleObject, IPoolable
     {
         currentState = newState;
         agent.isStopped = currentState != MonsterState.Trace;  
-        if (agent.isStopped )
-            rigidbody.velocity *= 0.1f;
     }  
 
     private void OnIdleState()
@@ -205,7 +201,6 @@ public class MonsterController : BattleObject, IPoolable
     private void OnAttackState()
     { 
         agent.isStopped = false;
-        rigidbody.velocity *= 0.1f;
 
         transform.LookAt(player.transform);
 

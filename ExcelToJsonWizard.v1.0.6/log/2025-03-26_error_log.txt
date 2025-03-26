@@ -14,3 +14,5 @@
    at ClosedXML.Excel.XLWorkbook..ctor(String file, LoadOptions loadOptions)
    at ClosedXML.Excel.XLWorkbook..ctor(String file)
    at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)
+2025-03-26 오후 3:25:01: Error processing sheet Sheet1 in file excel_files\SkillInfo.xlsx: Enum type 'Stat' not found in Enum definitions.
+   at ExcelToJsonWizard.Program.GenerateClassAndJsonFromExcel(String excelPath, String loaderDir, String jsonDir, String logFilePath, Boolean allowMultipleSheets, Boolean useResources, String resourcesInternalPath)

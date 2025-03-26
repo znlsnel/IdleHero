@@ -1,38 +1,66 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using static DesignEnums;
 
 [Serializable]
 public class PlayerStatData
 {
+    [field: SerializeField] private StatDataSO _statDataSO;
+
     private Dictionary<SkillInfo, int> _skills = new Dictionary<SkillInfo, int>();
-    private float[] stats;
+    private Dictionary<EStat, long> _statDataDict = new Dictionary<EStat, long>();
+    private Dictionary<EStat, int> _statLevelDict = new Dictionary<EStat, int>();
+    
+    private long[] _statPrice = new long[1001];
+    public long[] SkillStats {get; private set;}
+    public long Health {get; private set;} 
+ 
+    public int GetLevel(EStat statType) => _statLevelDict[statType];
+    public void SetLevel(EStat statType, int level) => _statLevelDict[statType] = level;
+    public long GetLevelPrice(int level) => _statPrice[level];
+ 
 
     // 플레이어 기본 속성
-    [SerializeField] public float MaxHealth {get; set;} = 100;
-    [SerializeField] public float Health {get; set;} = 100; 
-    [SerializeField] public float Coins {get; set;} = 0; 
+    [SerializeField] public long Coins {get; set;} = 100000000;  
  
+    // 플레이어
     public event Action OnCheangeValue;
- 
+  
     public PlayerStatData()
-    {
-        stats = new float[Enum.GetValues(typeof(EStat)).Length];
-        stats[(int)EStat.AttackRange] = 3f;   
-        stats[(int)EStat.Damage] = 10f;  
-        stats[(int)EStat.AttackRate] = 1f;
-        stats[(int)EStat.MoveSpeed] = 5f; 
-        stats[(int)EStat.ManaRecoveryRate] = 0f;
-        stats[(int)EStat.HealthRecoveryRate] = 1f;  
-        stats[(int)EStat.EvasionRate] = 0f;
-        stats[(int)EStat.Armor] = 0f;
-        stats[(int)EStat.CriticalHitRate] = 10f; 
+    {  
+ 
     } 
       
     public void Init()
     {
+        SkillStats = new long[Enum.GetValues(typeof(EStat)).Length];
+
+        foreach (var statData in _statDataSO.itemDatas)
+        {
+            _statDataDict[statData.statType] = statData.value;
+            _statLevelDict[statData.statType] = 0;
+        }
+ 
+
+
+        foreach (EStat statType in Enum.GetValues(typeof(EStat)))
+        {
+            if (!_statDataDict.ContainsKey(statType))
+            {
+                _statDataDict[statType] = 0;
+                _statLevelDict[statType] = 0;  
+            }
+        }
+ 
+        _statPrice[0] = _statDataSO.startPrice;
+        for (int i = 1; i < _statPrice.Length; i++)
+            _statPrice[i] = _statPrice[i - 1] + (long)(_statPrice[i - 1] * (_statDataSO.priceIncreaseRate * 0.01f));   
+        
+
         Managers.Instance.StartCoroutine(UpdateCondition(1f));
     }
  
@@ -41,91 +69,47 @@ public class PlayerStatData
         while (true)
         {
             if (Health > 0)
-                AddHealth((int)stats[(int)EStat.HealthRecoveryRate]);
+                Heal(GetStat(EStat.HealthRecoveryRate));    
+            
             
             yield return new WaitForSeconds(time);
         }
     }
-
     public void AddSkill(SkillInfo skill)
     {
-        if (_skills.ContainsKey(skill))
-        {
-            _skills[skill]++;
-        }
-        else
-        {
-            _skills[skill] = 1;
-        }
-
-            OnCheangeValue?.Invoke();
-
-    }
-
-    public void RemoveSkill(SkillInfo skill)
-    {
-        if (_skills.ContainsKey(skill))
-        {
-            _skills[skill]--;
-            if (_skills[skill] <= 0)
-            {
-                _skills.Remove(skill);
-            }
-        }   
-        OnCheangeValue?.Invoke();
-    }
-
-    public float GetStat(EStat type)
-    {
-        float stat = stats[(int)type];
-
-        float rate = 0f;
-        // 스킬 효과를 합산
-        foreach (var skillEntry in _skills)
-        {
-            SkillInfo skill = skillEntry.Key;
-            int skillCount = skillEntry.Value;
-
-            for (int i = 0; i < skill.Stat.Count; i++)
-            {
-                if (skill.Stat[i] == type)
-                {
-                    rate += skill.StatValue[i] * skillCount;
-                }
-            }
-        }
-
-        return stat * (1 + rate * 0.01f);  
-    }
-
-    public void AddHealth(float amount)
-    {
-        Health += amount;
-        if (Health > MaxHealth)
-            Health = MaxHealth;
+        _skills[skill] = _skills.ContainsKey(skill) ? _skills[skill] + 1 : 1;
         
-        OnCheangeValue?.Invoke();
-    }
-
-    public void SubtractHealth(float amount)
-    {
-        Health -= amount; 
-        if (Health < 0)
-            Health = 0;
-
+        for (int i = 0; i < skill.Stat.Count; i++)
+            SkillStats[(int)skill.Stat[i]] += skill.StatValue[i];
 
         OnCheangeValue?.Invoke();
     }
 
-    public void IncreaseCoins(float amount) 
+    public long GetStat(EStat type)
     {
-        Coins += amount;
+        long stat = _statDataDict[type];
+        float rate = SkillStats[(int)type] * 0.01f;
+
+        return (long)(stat * (1 + rate));     
+    }
+ 
+ 
+	public void ModifyStat(EStat statType, long amount, bool set = false)
+	{
+		if (!_statDataDict.ContainsKey(statType)) return;
+		_statDataDict[statType] = set ? amount : _statDataDict[statType] + amount; 
+
+        OnCheangeValue?.Invoke();
+	}
+ 
+    public void Heal(long value)
+    { 
+        Health = (long)Mathf.Clamp(Health + value, 0, _statDataDict[EStat.MaxHealth]);
         OnCheangeValue?.Invoke();
     }
  
-    public void DecreaseCoins(float amount)
+    public void Damage(int value)
     {
-        Coins -= amount;
-        OnCheangeValue?.Invoke(); 
+        Health = (long)Mathf.Clamp(Health - value, 0, _statDataDict[EStat.MaxHealth]);
     }
 }
