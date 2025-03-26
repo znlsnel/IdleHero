@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class DamageOverTime : MonoBehaviour
 {
-    [SerializeField] private float Damage = 10;
+    [SerializeField] private long Damage = 10;
     [SerializeField] private int interval = 1;
     [SerializeField] private TargetSensor targetSensor;
     [SerializeField] private GameObject _attackParticle;
@@ -28,10 +28,10 @@ public class DamageOverTime : MonoBehaviour
     private IEnumerator DamageOverTimeCoroutine()
     {
         while(true) 
-        {
+        { 
             foreach(var monster in targetSensor.Monsters)
             {
-                monster.OnDamage(playerStatData.GetStat(EStat.Damage) * (long)Damage, _attackParticle);
+                monster.OnDamage((long)Mathf.Max(1, playerStatData.GetStat(EStat.Damage) * Damage / 100), _attackParticle);
                 Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.1f);  
 
             }

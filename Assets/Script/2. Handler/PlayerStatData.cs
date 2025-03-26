@@ -25,7 +25,7 @@ public class PlayerStatData
  
 
     // 플레이어 기본 속성
-    [SerializeField] public long Coins {get; set;} = 100000000;  
+    [SerializeField] public long Coins {get; set;} = 0;  
  
     // 플레이어
     public event Action OnCheangeValue;
@@ -44,7 +44,6 @@ public class PlayerStatData
             _statDataDict[statData.statType] = statData.value;
             _statLevelDict[statData.statType] = 0;
         }
- 
 
 
         foreach (EStat statType in Enum.GetValues(typeof(EStat)))
@@ -69,12 +68,12 @@ public class PlayerStatData
         while (true)
         {
             if (Health > 0)
-                Heal(GetStat(EStat.HealthRecoveryRate));    
+                Heal(SkillStats[(int)EStat.HealthRecoveryRate] / 10);     
             
             
             yield return new WaitForSeconds(time);
         }
-    }
+    } 
     public void AddSkill(SkillInfo skill)
     {
         _skills[skill] = _skills.ContainsKey(skill) ? _skills[skill] + 1 : 1;
@@ -111,5 +110,6 @@ public class PlayerStatData
     public void Damage(int value)
     {
         Health = (long)Mathf.Clamp(Health - value, 0, _statDataDict[EStat.MaxHealth]);
+        OnCheangeValue?.Invoke(); 
     }
 }

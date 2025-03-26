@@ -43,7 +43,7 @@ public class StoreItemSlot : MonoBehaviour
         int level = playerStatData.GetLevel(statType); 
  
         _levelText.text = (level).ToString(); 
-        _priceText.text = level == 50 ? "MAX" : Util.ConvertBigint(playerStatData.GetLevelPrice(level+1));
+        _priceText.text = level == 50 ? "MAX" : Util.ConvertBigint(playerStatData.GetLevelPrice(level));
         
         _curStatText.text = Util.ConvertBigint(playerStatData.GetStat(statType));
         _nxtStatText.text = level == 50 ? "MAX" : Util.ConvertBigint(GetNextStatValue());  
@@ -52,7 +52,7 @@ public class StoreItemSlot : MonoBehaviour
     private void Buy()
     {
        int level = playerStatData.GetLevel(statType);
-       if (playerStatData.Coins < playerStatData.GetLevelPrice(level+1))
+       if (playerStatData.Coins < playerStatData.GetLevelPrice(level)) 
        {
         Debug.Log("돈이 부족합니다.");
         return;

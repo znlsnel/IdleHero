@@ -1,23 +1,6 @@
 {
   "Items": [
     {
-      "key": 1001,
-      "Name": "Warrior",
-      "Description": "공격속도가 느려지는 대신 강한 힘을 얻습니다",
-      "Stat": [
-        1,
-        2
-      ],
-      "StatValue": [
-        20,
-        -10
-      ],
-      "EffectPrefab": [
-        "None"
-      ],
-      "Image": "Warrior"
-    },
-    {
       "key": 1002,
       "Name": "Assassin",
       "Description": "빠른 공격속도와 빠른 이동속도를 얻습니다",

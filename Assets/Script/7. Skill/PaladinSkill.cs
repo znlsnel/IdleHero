@@ -42,7 +42,7 @@ public class PaladinSkill : MonoBehaviour
     {
         if(other.TryGetComponent(out MonsterController monster)) 
         {  
-            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * (long)Damage, _attackParticle); 
+            monster.OnDamage((long)Mathf.Max(1, playerStatData.GetStat(EStat.Damage) * Damage / 100), _attackParticle);  
             Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.2f); 
         } 
     }

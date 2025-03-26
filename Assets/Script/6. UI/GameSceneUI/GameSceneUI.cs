@@ -29,7 +29,7 @@ public class GameSceneUI : UI_Scene
     {
         healthSlider.value = playerStatHandler.Health; 
         healthSlider.maxValue = playerStatHandler.GetStat(EStat.MaxHealth);
-        coinsText.text = playerStatHandler.Coins.ToString(); 
+        coinsText.text = Util.ConvertBigint(playerStatHandler.Coins);  
     
         healthRateText.text = $"{playerStatHandler.Health} / {playerStatHandler.GetStat(EStat.MaxHealth)}";
     }
@@ -37,5 +37,10 @@ public class GameSceneUI : UI_Scene
     private void SetStageText()
     {
         stageText.text = $"Stage: {Managers.Stage.currentStage}"; 
+    }
+
+    public void OpenUpgradeStoreUI()
+    { 
+        Managers.UI.ShowPopupUI<UpgradeStoreUI>(); 
     }
 }

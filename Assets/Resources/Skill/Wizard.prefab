@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a23aa3387333c2144a01602133f891da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 3
+  Damage: 300
   particle: {fileID: 7456189446365218041, guid: 3f219f3c338014b4ea79f2295c6a5a46,
     type: 3}
   triggerChance: 30

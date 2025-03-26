@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53aada84813f6a14788eb728b27d824b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 1.2
+  Damage: 120
   _attackParticle: {fileID: 3942232414438588159, guid: 206618aad9894104183fe33ff4e7183e,
     type: 3}
   _speed: 180
@@ -70,8 +70,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: -0.39, y: 0, z: 0}
+  m_Radius: 1.4
+  m_Center: {x: -0.39, y: -0.19, z: 0}
 --- !u!1001 &3797567881760394137
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -18,7 +18,7 @@ MonoBehaviour:
   - icon: {fileID: 21300000, guid: 02b04af5bffa144bc8f7e0724c6caf8c, type: 3}
     statType: 3
     statName: "\uC774\uB3D9\uC18D\uB3C4"
-    value: 3
+    value: 5
     upgradeable: 0
     upgradeRate: 0
     plusStat: 0

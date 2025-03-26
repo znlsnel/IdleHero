@@ -1,23 +1,6 @@
 {
   "Items": [
     {
-      "key": 1001,
-      "Name": "Warrior",
-      "Description": "공격속도가 느려지는 대신 강한 힘을 얻습니다",
-      "Stat": [
-        1,
-        2
-      ],
-      "StatValue": [
-        20,
-        -10
-      ],
-      "EffectPrefab": [
-        "None"
-      ],
-      "Image": "Warrior"
-    },
-    {
       "key": 1002,
       "Name": "Assassin",
       "Description": "빠른 공격속도와 빠른 이동속도를 얻습니다",
@@ -39,7 +22,7 @@
       "Name": "Ranger",
       "Description": "공격 범위가 증가합니다",
       "Stat": [
-        8
+        7
       ],
       "StatValue": [
         10
@@ -54,7 +37,7 @@
       "Name": "BlessingOfAgility",
       "Description": "공격 회피율이 증가합니다",
       "Stat": [
-        6
+        5
       ],
       "StatValue": [
         10
@@ -114,7 +97,7 @@
       "Name": "Gladiator",
       "Description": "방어력이 증가합니다",
       "Stat": [
-        7
+        6
       ],
       "StatValue": [
         10
@@ -144,7 +127,7 @@
       "Name": "Priest",
       "Description": "체력 회복률이 증가합니다",
       "Stat": [
-        5
+        4
       ],
       "StatValue": [
         10
@@ -159,7 +142,7 @@
       "Name": "Sword",
       "Description": "치명타 확률이 오릅니다",
       "Stat": [
-        9
+        8
       ],
       "StatValue": [
         10

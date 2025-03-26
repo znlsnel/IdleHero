@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeStoreUI : MonoBehaviour
+public class UpgradeStoreUI : UI_Popup
 {
     [SerializeField] private StatDataSO _statDataSO;
     [SerializeField] private GameObject _storeItemSlotPrefab;
     [SerializeField] private Transform _storeItemSlotParent; 
     void Start()
     {
+        base.Init();
         foreach (var statData in _statDataSO.itemDatas)
         {
             if (!statData.upgradeable) 
@@ -21,12 +22,7 @@ public class UpgradeStoreUI : MonoBehaviour
 
     public void CloseUI()
     { 
-        gameObject.SetActive(false);
-    }
-
-    public void OpenUI() 
-    {
-        gameObject.SetActive(true);
+        Managers.UI.ClosePopupUI(this); 
     }
 }
  
