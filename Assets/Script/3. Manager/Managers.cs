@@ -1,4 +1,6 @@
 
+using System;
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -69,5 +71,15 @@ public class Managers : Singleton<Managers>
 
     }
     
+    public static void SetTimer(Action action, float time)
+    {
+        Instance.StartCoroutine(Instance.SetTimerCoroutine(action, time));
+    }
+    
+    private IEnumerator SetTimerCoroutine(Action action, float time)
+    {
+        yield return new WaitForSeconds(time);
+        action?.Invoke();
+    }
     
 }

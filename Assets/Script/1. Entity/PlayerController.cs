@@ -7,6 +7,7 @@ using System.Collections;
 using System.ComponentModel;
 using System;
 using Random = UnityEngine.Random;
+using UnityEngine.Animations;
 
 public enum EPlayerState
 {
@@ -48,14 +49,13 @@ public class PlayerController : BattleObject
     private void Awake()
     {
         targetSensorHandler = GetComponentInChildren<TargetSensorHandler>(); 
-        
         animationHandler = gameObject.GetOrAddComponent<PlayerAnimationHandler>(); 
         agent = gameObject.GetOrAddComponent<NavMeshAgent>();   
 
         rigidbody = GetComponent<Rigidbody>();
  
         playerStatData.Init(); 
-        playerStatData.Health = playerStatData.MaxHealth;
+        
         agent.enabled = false;
 
         Invoke(nameof(Init), 1.0f);  
@@ -86,20 +86,43 @@ public class PlayerController : BattleObject
         Managers.Sound.Play($"FootStep/SFX_Movement_Footstep_Water_{Random.Range(1, 5)}", 0.5f);
     }  
 
-    private void Init()
-    {
-        agent.enabled = true;
+    public void Init()
+    { 
+        //agent.Warp(new Vector3(0, 0, 4)); 
+        agent.enabled = true; 
+        playerStatData.Health = playerStatData.MaxHealth;
         agent.speed = playerStatData.GetStat(EStat.MoveSpeed);
+        animationHandler.SetDeathHash(false);  
+        SetState(EPlayerState.Idle); 
     }
+
  
     public override void OnDamage(float damage, GameObject particle)
     { 
+        damage=100;
+        if (currentState == EPlayerState.Death)
+            return;
+
         if (Random.Range(0, 100) < playerStatData.GetStat(EStat.EvasionRate))
             return;
 
         float armorDamage = damage * (playerStatData.GetStat(EStat.Armor) * 0.01f);
         damage = Mathf.Clamp(damage, damage / 2, damage - armorDamage); 
         playerStatData.SubtractHealth((int)damage);  
+
+        if (playerStatData.Health <= 0)
+        {
+            currentState = EPlayerState.Death;
+            SetState(EPlayerState.Death);
+            Managers.Sound.Play("UI/SFX_UI_Bonus_1", 1f); 
+             
+            Managers.SetTimer(()=>
+            {
+                Init(); 
+                Managers.Stage.Restart(); 
+                
+            }, 2.0f); 
+        }
 
         var go = Instantiate(particle, transform.position, Quaternion.identity);
         Destroy(go, 2.5f);
@@ -236,21 +259,12 @@ public class PlayerController : BattleObject
                 currentTarget = monsters[0];
             }
 
-            
-            
 
             yield return new WaitForSeconds(0.3f); 
         }
     }
     
     #endregion
-    
-    private IEnumerator SetTimer(Action action, float time)
-    {
-        yield return new WaitForSeconds(time);
-        action?.Invoke();
-
-    }
 
 }
 

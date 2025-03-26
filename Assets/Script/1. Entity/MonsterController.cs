@@ -71,7 +71,7 @@ public class MonsterController : BattleObject, IPoolable
             UpdateState(); 
           
     }
-    public void Init() 
+    private void Init() 
     {
         LocateNavMeshPosition();
         SetState(MonsterState.Idle); 

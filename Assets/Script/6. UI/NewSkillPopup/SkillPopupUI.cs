@@ -28,6 +28,7 @@ public class SkillPopupUI : UI_Popup
     private void Start()
     {
         LoadRandomSkills();
+        Managers.Sound.Play("UI/SFX_UI_Appear_1", 1f); 
     } 
  
     public override void Init() 

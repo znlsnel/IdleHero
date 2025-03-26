@@ -60,7 +60,7 @@ public class StageManager : IManager
           //  monster = GameObject.Instantiate(monster);  
             
             monster.transform.position = randomPosition;
-                        
+                
             _monsters.Add(monster);
             monster.GetComponent<MonsterController>().onDie += UnregisterMonster;
 
@@ -76,20 +76,34 @@ public class StageManager : IManager
 
         if (_monsters.Count == 0)
         {
-            Managers.Sound.Play("Effect/SFX_Cash_Register_Buy_Click_1", 0.5f);  
+            Managers.Sound.Play("UI/STGR_Success_Energetic_Happy", 1f);   
             StageClear();
         }
     }
- 
-    private void StageClear()
+    
+    public void Restart()
+    {
+        foreach (var monster in _monsters)
+        {
+            monster.SetActive(false);
+            Managers.Pool.Release(monster); 
+        }
+        _monsters.Clear();
+        StageClear(true);
+    }
+    private void StageClear(bool Reset = false)
     {
         dungeonGenerator.GenerateDungeon(); 
         Managers.Player.transform.position = new Vector3(0, 0, 4);
         OnStageClear?.Invoke();
 
-        Managers.UI.ShowPopupUI<SkillPopupUI>();   
-
-        currentStage++;
-        OnChangeStage?.Invoke();   
+        if (!Reset)
+        {
+            Managers.UI.ShowPopupUI<SkillPopupUI>();   
+            currentStage++;
+            OnChangeStage?.Invoke();   
+        }        
     }
+
+    
 } 

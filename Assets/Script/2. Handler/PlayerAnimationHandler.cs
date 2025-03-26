@@ -10,9 +10,9 @@ public class PlayerAnimationHandler : MonoBehaviour
     
     private Animator animator;
 
-     private void Start()
+     private void Awake()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>(); 
     }
 
     public void SetAttackHash(bool isAttack)
@@ -27,7 +27,7 @@ public class PlayerAnimationHandler : MonoBehaviour
 
 
     public void SetDeathHash(bool isDeath)
-    {
+    { 
         animator.SetBool(DeathHash, isDeath);
     }
 
