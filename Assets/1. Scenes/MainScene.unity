@@ -1051,17 +1051,17 @@ PrefabInstance:
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
       propertyPath: _dungeonDepth
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
       propertyPath: _dungeonSize.x
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}
       propertyPath: _dungeonSize.y
-      value: 8
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1853077911117697117, guid: 9ad1ba1755ae26b499eda244ebc6dc3c,
         type: 3}

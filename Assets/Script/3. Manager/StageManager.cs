@@ -31,10 +31,10 @@ public class StageManager : IManager
  
     }
  
-    public void SpawnMonster(float delay = 1f, int count = 25 )   
+    public void SpawnMonster(float delay = 1f, int count = 5 )   
     {
         Managers.Instance.StartCoroutine(SpawnMonsterCoroutine(delay, count + currentStage));
-    } 
+    }  
     private IEnumerator SpawnMonsterCoroutine(float delay, int count) 
     { 
         yield return new WaitForSeconds(delay);
