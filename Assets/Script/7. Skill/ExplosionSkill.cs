@@ -20,7 +20,7 @@ public class ExplosionSkill : MonoBehaviour
         player.GetComponent<PlayerController>().OnPlayerAttack += () =>Active();
         targetSensor = gameObject.GetOrAddComponent<TargetSensor>();
     }
- 
+  
     public void Active()
     {
 
@@ -30,12 +30,12 @@ public class ExplosionSkill : MonoBehaviour
         Vector3 position = player.transform.position;
         position += player.transform.forward * 2; 
         transform.position = position;  
- 
+  
         GameObject go = Managers.Pool.Get(particle);
         go.transform.position = position;
         foreach(var monster in targetSensor.Monsters)
         {
-            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, particle); 
+            monster.OnDamage(playerStatData.GetStat(EStat.Damage) * Damage, _attackParticle); 
         }
 
         Managers.Sound.Play($"Explosion/SFX_Firework_Explosion_{Random.Range(1, 4)}", 0.5f);

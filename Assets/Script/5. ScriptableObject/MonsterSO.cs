@@ -14,6 +14,6 @@ public class MonsterSO : ScriptableObject
     [field : SerializeField] public int AttackDelay {get; private set;}
     [field : SerializeField] public int AttackRange {get; private set;}   
     [field : SerializeField] public int TraceRange {get; private set;}   
-    [field : SerializeField] public int MoveSpeed {get; private set;}   
+    [field : SerializeField] public int MoveSpeed {get; private set;}    
 } 
  

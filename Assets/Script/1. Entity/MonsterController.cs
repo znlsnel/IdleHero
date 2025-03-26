@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
@@ -112,16 +113,17 @@ public class MonsterController : BattleObject, IPoolable
     } 
     
     #endregion
-    #region Animation Event
+    #region Battle Function
     public override void OnDamage(float damage, GameObject particle)
     {
         if (currentState == MonsterState.Death)
             return;
- 
+
         currentHealth -= damage;
         if (currentHealth <= 0)
         {
             SetState(MonsterState.Death);
+            Managers.Player.GetComponent<PlayerController>().playerStatData.IncreaseCoins(100); 
         } 
 
         DamageUI damageUI = Managers.UI.ShowSceneChildUI<DamageUI>();

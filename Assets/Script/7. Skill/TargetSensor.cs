@@ -5,6 +5,16 @@ public class TargetSensor : MonoBehaviour
 {
     [SerializeField] private HashSet<MonsterController> monsters = new HashSet<MonsterController>();
     public HashSet<MonsterController> Monsters => monsters;
+
+    private void Start()
+    {
+        Managers.Player.GetComponent<PlayerController>().OnPlayerDie += Clear;
+    }
+
+    private void Clear()
+    {
+        monsters.Clear();
+    }
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent(out MonsterController monster))

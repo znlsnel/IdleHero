@@ -31,7 +31,7 @@ public class StageManager : IManager
  
     }
  
-    public void SpawnMonster(float delay = 1f, int count = 12 )  
+    public void SpawnMonster(float delay = 1f, int count = 25 )   
     {
         Managers.Instance.StartCoroutine(SpawnMonsterCoroutine(delay, count + currentStage));
     } 
@@ -59,7 +59,7 @@ public class StageManager : IManager
             //GameObject monster = Managers.Resource.Load<GameObject>("Monster/Bat");
           //  monster = GameObject.Instantiate(monster);  
             
-            monster.transform.position = randomPosition;
+            monster.GetComponent<NavMeshAgent>().Warp(randomPosition); 
                 
             _monsters.Add(monster);
             monster.GetComponent<MonsterController>().onDie += UnregisterMonster;

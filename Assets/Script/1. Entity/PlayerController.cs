@@ -44,7 +44,7 @@ public class PlayerController : BattleObject
 
     // Event Action
     public event Action OnPlayerAttack;
-
+    public event Action OnPlayerDie;
 
     private void Awake()
     {
@@ -93,13 +93,14 @@ public class PlayerController : BattleObject
         playerStatData.Health = playerStatData.MaxHealth;
         agent.speed = playerStatData.GetStat(EStat.MoveSpeed);
         animationHandler.SetDeathHash(false);  
+        animationHandler.SetAttackHash(false);    
+
         SetState(EPlayerState.Idle); 
     }
 
  
-    public override void OnDamage(float damage, GameObject particle)
+    public override void OnDamage(float damage, GameObject particle) 
     { 
-        damage=100;
         if (currentState == EPlayerState.Death)
             return;
 
@@ -115,7 +116,7 @@ public class PlayerController : BattleObject
             currentState = EPlayerState.Death;
             SetState(EPlayerState.Death);
             Managers.Sound.Play("UI/SFX_UI_Bonus_1", 1f); 
-             
+            OnPlayerDie?.Invoke();
             Managers.SetTimer(()=>
             {
                 Init(); 
@@ -189,19 +190,21 @@ public class PlayerController : BattleObject
 
     public void OnIdleState()
     {
-        if (monsters == null || monsters.Count == 0)
+        if (monsters == null || monsters.Count == 0 || currentTarget.GetComponent<MonsterController>().IsDead)
             return;
-        
+         
         SetState(EPlayerState.Move);
         animationHandler.SetMoveHash(false);
-    }
+    } 
 
     public void OnMoveState()
     {
-        animationHandler.SetMoveHash(true); 
+
+        animationHandler.SetMoveHash(true);  
 
         if (currentTarget != null)
             agent.SetDestination(currentTarget.transform.position);
+        
 
         if (IsAttackable()) 
         {
@@ -211,6 +214,7 @@ public class PlayerController : BattleObject
         
         else if (currentTarget == null)
             SetState(EPlayerState.Idle);
+
     }
 
     public void OnAttackState()
@@ -238,8 +242,8 @@ public class PlayerController : BattleObject
     #region Utility
     private bool IsAttackable()
     {
-
-        return monsters != null && monsters.Count > 0 && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange;
+        bool monster = monsters != null && monsters.Count > 0  && currentTarget.GetComponent<MonsterController>().IsDead == false;
+        return monster && Vector3.Distance(currentTarget.transform.position, transform.position) <= attackRange; 
     }
     public void SetStageMonster(List<GameObject> monsters)
     {
@@ -259,8 +263,8 @@ public class PlayerController : BattleObject
                 currentTarget = monsters[0];
             }
 
-
-            yield return new WaitForSeconds(0.3f); 
+ 
+            yield return new WaitForSeconds(0.1f); 
         }
     }
     

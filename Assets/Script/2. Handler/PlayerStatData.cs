@@ -13,8 +13,6 @@ public class PlayerStatData
     // 플레이어 기본 속성
     [SerializeField] public float MaxHealth {get; set;} = 100;
     [SerializeField] public float Health {get; set;} = 100; 
-    [SerializeField] public float Experience {get; set;} = 0;
-    [SerializeField] public float MaxExperience {get; set;} = 100;
     [SerializeField] public float Coins {get; set;} = 0; 
  
     public event Action OnCheangeValue;
@@ -23,28 +21,28 @@ public class PlayerStatData
     {
         stats = new float[Enum.GetValues(typeof(EStat)).Length];
         stats[(int)EStat.AttackRange] = 3f;   
-        stats[(int)EStat.Damage] = 3f; 
+        stats[(int)EStat.Damage] = 10f;  
         stats[(int)EStat.AttackRate] = 1f;
         stats[(int)EStat.MoveSpeed] = 5f; 
         stats[(int)EStat.ManaRecoveryRate] = 0f;
-        stats[(int)EStat.HealthRecoveryRate] = 0f; 
+        stats[(int)EStat.HealthRecoveryRate] = 1f;  
         stats[(int)EStat.EvasionRate] = 0f;
         stats[(int)EStat.Armor] = 0f;
         stats[(int)EStat.CriticalHitRate] = 10f; 
-         
-        
-    }
-    
+    } 
+      
     public void Init()
     {
         Managers.Instance.StartCoroutine(UpdateCondition(1f));
     }
-
+ 
     IEnumerator UpdateCondition(float time)
     {
         while (true)
         {
-            AddHealth((int)stats[(int)EStat.HealthRecoveryRate]);
+            if (Health > 0)
+                AddHealth((int)stats[(int)EStat.HealthRecoveryRate]);
+            
             yield return new WaitForSeconds(time);
         }
     }
@@ -62,7 +60,6 @@ public class PlayerStatData
 
             OnCheangeValue?.Invoke();
 
-        Debug.Log($"AddSkill: {skill.Name} {_skills[skill]}"); 
     }
 
     public void RemoveSkill(SkillInfo skill)
@@ -107,7 +104,6 @@ public class PlayerStatData
         if (Health > MaxHealth)
             Health = MaxHealth;
         
-        Debug.Log($"Health increased: {Health}");
         OnCheangeValue?.Invoke();
     }
 
@@ -117,21 +113,19 @@ public class PlayerStatData
         if (Health < 0)
             Health = 0;
 
-        Debug.Log($"Health decreased: {Health}"); 
+
         OnCheangeValue?.Invoke();
     }
 
     public void IncreaseCoins(float amount) 
     {
         Coins += amount;
-        Debug.Log($"Coins increased: {Coins}");
         OnCheangeValue?.Invoke();
     }
  
     public void DecreaseCoins(float amount)
     {
         Coins -= amount;
-        Debug.Log($"Coins decreased: {Coins}"); 
-        OnCheangeValue?.Invoke();
+        OnCheangeValue?.Invoke(); 
     }
 }
