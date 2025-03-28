@@ -9,6 +9,7 @@
 <br>
 
 - **개발 기간** : 2025.03.23 - 2025.03.26
+- **개발 인원** : 1인
 - **사용 기술** <br>
 -언어 : C#<br>
 -엔진 : Unity Engine <br>
@@ -16,3 +17,42 @@
 <br>
 
 ---
+
+# 📼 플레이 영상 링크
+<a href="https://www.youtube.com/shorts/zjSL14DyflI">
+  <img src="https://github.com/user-attachments/assets/7166e35a-a303-419e-a461-36fb1d62f34e" alt="시연 영상" width="500">
+</a>
+
+<br><br>
+---
+
+
+
+# 🫀 핵심 기능 
+<details>
+  <summary>Managers</summary>
+<br><br>
+</details>
+
+<details>
+  <summary>던전 생성기</summary>
+  
+  ![GenerateDungeon](https://github.com/user-attachments/assets/de1c7ae1-6919-4e94-bded-2f8c9b41025b)
+<br><br>
+</details>
+
+<details> <summary>기획 테이블</summary>
+  
+  ![image](https://github.com/user-attachments/assets/fed7f7cd-a0a4-4874-99f2-6007120fde80)
+<br><br>
+</details>
+
+<details> <summary>스킬 시스템</summary>
+<br><br>
+
+<details>
+  <summary>캐릭터</summary>
+<br><br>
+</details>
+
+
