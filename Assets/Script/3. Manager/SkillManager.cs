@@ -8,7 +8,7 @@ public class SkillManager : IManager
     // 스킬 목록 초기화
     public void Init()
     {
-        _skills = DataManager.skillInfoLoader.ItemsList;
+        _skills = Managers.Data.skillInfoLoader.ItemsList;
     }
 
     // 랜덤하게 스킬 추출

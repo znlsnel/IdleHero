@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class DataManager
 {
-    public static SkillInfoLoader skillInfoLoader = new SkillInfoLoader();
+    public SkillInfoLoader skillInfoLoader = new SkillInfoLoader();
 }

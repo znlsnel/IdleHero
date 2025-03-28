@@ -119,16 +119,18 @@ public class PlayerController : BattleObject
             SetState(EPlayerState.Death);
             Managers.Sound.Play("UI/SFX_UI_Bonus_1", 1f); 
             OnPlayerDie?.Invoke();
-            Managers.SetTimer(()=>
-            {
-                Init(); 
-                Managers.Stage.Restart(); 
-                
-            }, 2.0f); 
+
+            Invoke(nameof(Restart), 2.0f);
         }
 
         var go = Instantiate(particle, transform.position + Vector3.up * 1.0f, Quaternion.identity);
         Destroy(go, 2.5f);
+    }
+  
+    private void Restart()
+    {
+        Init(); 
+        Managers.Stage.Restart(); 
     }
   
     public override void OnAttack()
