@@ -29,40 +29,49 @@
 
 
 # 🫀 핵심 기능 
-<details>
-  <summary>개발 프레임워크</summary>
+<details><summary>개발 프레임워크</summary>
 
-  ![image](https://github.com/user-attachments/assets/7a20c389-2bc4-46d0-bf46-67628175af2e)
+![image](https://github.com/user-attachments/assets/7a20c389-2bc4-46d0-bf46-67628175af2e)
 
-<br><br>
-</details>
 
-<details>
-  <summary>던전 생성기</summary>
+
+<br><br></details>
+<details><summary>던전 생성기</summary>
   
-  ![GenerateDungeon](https://github.com/user-attachments/assets/de1c7ae1-6919-4e94-bded-2f8c9b41025b)
-<br><br>
-</details>
+![GenerateDungeon](https://github.com/user-attachments/assets/de1c7ae1-6919-4e94-bded-2f8c9b41025b)
 
+
+
+<br><br></details>
 <details> <summary>기획 테이블</summary>
   
-  ![image](https://github.com/user-attachments/assets/fed7f7cd-a0a4-4874-99f2-6007120fde80)
-<br><br>
-</details>
+<img src="https://github.com/user-attachments/assets/fed7f7cd-a0a4-4874-99f2-6007120fde80" alt="기획 테이블" width="1000">
 
+
+
+<br><br></details>
 <details> <summary>스킬 시스템</summary>
 
 ![SkillPopup](https://github.com/user-attachments/assets/da539d47-548a-47c4-b54c-10d205b70ad8)
-<br><br>
-<details>
 
+
+
+
+<br><br></details>
 <details> <summary>상점 시스템</summary>
-<br><br>
 
-<details>
+![Store](https://github.com/user-attachments/assets/76746564-9877-484e-b7ae-3f04102d1965)
+
+
   
-  <summary>캐릭터</summary>
-<br><br>
-</details>
+<br><br></details>
+<details><summary>캐릭터</summary><br>
+
+![Character](https://github.com/user-attachments/assets/1b9d91e3-49bd-4ec5-a794-197b78a52e9f)
+
+
+
+
+<br><br></details>
 
 
