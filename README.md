@@ -30,7 +30,10 @@
 
 # 🫀 핵심 기능 
 <details>
-  <summary>Managers</summary>
+  <summary>개발 프레임워크</summary>
+
+  ![image](https://github.com/user-attachments/assets/7a20c389-2bc4-46d0-bf46-67628175af2e)
+
 <br><br>
 </details>
 
@@ -48,9 +51,16 @@
 </details>
 
 <details> <summary>스킬 시스템</summary>
+
+![SkillPopup](https://github.com/user-attachments/assets/da539d47-548a-47c4-b54c-10d205b70ad8)
+<br><br>
+<details>
+
+<details> <summary>상점 시스템</summary>
 <br><br>
 
 <details>
+  
   <summary>캐릭터</summary>
 <br><br>
 </details>
