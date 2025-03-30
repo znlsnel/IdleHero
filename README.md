@@ -14,18 +14,9 @@
 -언어 : C#<br>
 -엔진 : Unity Engine <br>
 -개발 환경 : Window11 <br>
-<br>
-
----
-
-# 📼 플레이 영상 링크
-<a href="https://www.youtube.com/shorts/zjSL14DyflI">
-  <img src="https://github.com/user-attachments/assets/7166e35a-a303-419e-a461-36fb1d62f34e" alt="시연 영상" width="500">
-</a>
-
 <br><br>
----
 
+---
 # 📁 프로젝트 구조
 ```
 Assets
@@ -55,10 +46,21 @@ Assets
     ├── 7. Skill          - 스킬 구현 및 효과
     └── Utils             - 유틸리티 클래스 및 확장 메서드
 ```
+<br><br>
 
-이 프로젝트는 넘버링 시스템을 사용하여 폴더를 체계적으로 구성했습니다. 각 폴더는 특정 기능 및 책임을 담당하며, 순서번호를 통해 의존성 관계와 중요도를 명시합니다. Resources 폴더는 게임 실행 중 동적으로 로드되는 리소스들을 보관하고 있으며, 0. External 폴더에는 에셋 스토어에서 구매한 외부 에셋들을 구성했습니다. 이러한 구조는 프로젝트의 확장성과 유지보수성을 크게 향상시킵니다.
+--- 
 
+
+# 📼 플레이 영상 링크
+<a href="https://www.youtube.com/shorts/zjSL14DyflI">
+  <img src="https://github.com/user-attachments/assets/7166e35a-a303-419e-a461-36fb1d62f34e" alt="시연 영상" width="500">
+</a>
+
+<br><br>
 ---
+
+
+
 
 # 📜 핵심 기능 
 <details><summary>개발 프레임워크</summary>
