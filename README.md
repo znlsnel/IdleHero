@@ -26,7 +26,39 @@
 <br><br>
 ---
 
+# 📁 프로젝트 구조
+```
+Assets
+├── 0. External         - 외부 에셋 및 라이브러리
+├── 1. Scenes           - 게임 씬 파일
+├── 2. InputSystem      - 입력 시스템 설정
+├── 3. Animation        - 애니메이션 및 컨트롤러
+├── 4. Prefab           - 프리팹 객체 
+├── 5. ScriptableObject - SO 에셋 인스턴스
+├── 6. Font             - 게임 폰트
+├── 7. Graphics         - 그래픽 리소스
+├── Resources           - 런타임 로드 리소스
+│   ├── JSON            - 데이터 파일
+│   ├── Monster         - 몬스터 리소스
+│   ├── Particle        - 파티클 효과
+│   ├── Sound           - 사운드 에셋
+│   ├── Skill           - 스킬 프리팹
+│   └── UI              - UI 프리팹
+└── Script              - 스크립트 파일
+    ├── 0. DataLoader     - 데이터 로딩 및 관리
+    ├── 1. Entity         - 플레이어, 몬스터 등 게임 객체
+    ├── 2. Handler        - 애니메이션, 타겟팅 등 특정 기능 처리
+    ├── 3. Manager        - 게임 시스템 전반 관리 (Stage, Skill, Pool 등)
+    ├── 4. Item           - 아이템 및 관련 기능
+    ├── 5. ScriptableObject - 몬스터, 스킬 등의 데이터 정의
+    ├── 6. UI             - 게임 인터페이스 요소
+    ├── 7. Skill          - 스킬 구현 및 효과
+    └── Utils             - 유틸리티 클래스 및 확장 메서드
+```
 
+이 프로젝트는 넘버링 시스템을 사용하여 폴더를 체계적으로 구성했습니다. 각 폴더는 특정 기능 및 책임을 담당하며, 순서번호를 통해 의존성 관계와 중요도를 명시합니다. Resources 폴더는 게임 실행 중 동적으로 로드되는 리소스들을 보관하고 있으며, 0. External 폴더에는 에셋 스토어에서 구매한 외부 에셋들을 구성했습니다. 이러한 구조는 프로젝트의 확장성과 유지보수성을 크게 향상시킵니다.
+
+---
 
 # 📜 핵심 기능 
 <details><summary>개발 프레임워크</summary>
@@ -134,8 +166,6 @@
 
 </details>
 <details><summary>유틸리티</summary><br>
-
-![Utility](https://github.com/user-attachments/assets/1b9d91e3-49bd-4ec5-a794-197b78a52e9f)
 
 - **확장 메서드 시스템**
   - GameObject 확장 메서드 구현 (GetOrAddComponent)
