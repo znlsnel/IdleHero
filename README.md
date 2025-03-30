@@ -1,5 +1,6 @@
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=50&pause=1000&width=435&height=80&lines=Idle+Heroooo!)
----
+<img src="https://readme-decorate.vercel.app/api/get?type=star&text=Idle+Hero&width=1200&height=200&fontSize=80&fontWeight=800&useGradient=true&fontColor=%23ffffff&backgroundColor=%23c9c9c9&gradientColor1=%23ffffff&gradientColor2=%23fd86cc">
+
+
 # 🛠️ Description
 - **프로젝트 소개** <br>
   해당 프로젝트는 방치형 RPG 게임입니다. <br>
@@ -14,6 +15,7 @@
 -언어 : C#<br>
 -엔진 : Unity Engine <br>
 -개발 환경 : Window11 <br>
+<br><br>
 <br><br>
 
 ---
@@ -47,6 +49,7 @@ Assets
     └── Utils             - 유틸리티 클래스 및 확장 메서드
 ```
 <br><br>
+<br><br>
 
 --- 
 
@@ -57,6 +60,8 @@ Assets
 </a>
 
 <br><br>
+<br><br>
+
 ---
 
 
