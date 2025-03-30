@@ -39,30 +39,7 @@
   - 전역 접근 가능한 매니저 인스턴스 제공
   - 리소스 캐싱과 풀링을 통한 최적화
 
-```csharp
-public class Managers : MonoBehaviour
-{
-    private static Managers s_instance = null;
-    public static Managers Instance { get { Init(); return s_instance; } }
-
-    private static void Init()
-    {
-        if (s_instance == null)
-        {
-            GameObject go = GameObject.Find("@Managers");
-            if (go == null)
-            {
-                go = new GameObject { name = "@Managers" };
-                go.AddComponent<Managers>();
-            }
-            s_instance = go.GetComponent<Managers>();
-            s_instance.Init();
-        }
-    }
-}
-```
-
-<br><br></details>
+</details>
 <details><summary>던전 생성기</summary>
   
 ![GenerateDungeon](https://github.com/user-attachments/assets/de1c7ae1-6919-4e94-bded-2f8c9b41025b)
@@ -74,114 +51,36 @@ public class Managers : MonoBehaviour
   - 스테이지 클리어 조건 관리
   - 던전 진행도에 따른 난이도 조절
 
-```csharp
-public class DungeonGenerator : MonoBehaviour
-{
-    private void GenerateDungeon()
-    {
-        // 노드 생성 및 연결
-        for (int i = 0; i < nodeCount; i++)
-        {
-            Vector3 randomPosition = GetRandomPosition();
-            GameObject node = Instantiate(nodePrefab, randomPosition, Quaternion.identity);
-            nodes.Add(node);
-        }
-
-        // NavMesh 자동 생성
-        NavMeshSurface surface = GetComponent<NavMeshSurface>();
-        surface.BuildNavMesh();
-    }
-}
-```
-
-<br><br></details>
+</details>
 <details> <summary>기획 테이블</summary>
   
 <img src="https://github.com/user-attachments/assets/fed7f7cd-a0a4-4874-99f2-6007120fde80" alt="기획 테이블" width="1000">
 
-- **데이터 주도 설계**
-  - ScriptableObject 기반의 데이터 관리
-  - 캐릭터, 몬스터, 스킬 데이터 구조화
-  - 스테이지별 난이도 밸런싱
-  - 업그레이드 시스템 데이터 관리
-  - 스킬 효과 및 밸런스 데이터
+- **데이터 관리 시스템**
+  - 엑셀 기반의 데이터 설계
+  - JSON 형식으로의 자동 변환
 
-```csharp
-[CreateAssetMenu(fileName = "MonsterData", menuName = "ScriptableObject/MonsterData")]
-public class MonsterSO : ScriptableObject
-{
-    public string monsterName;
-    public float maxHealth;
-    public float attackPower;
-    public float moveSpeed;
-    public float attackRange;
-    public float attackSpeed;
-}
-```
 
-<br><br></details>
+</details>
 <details> <summary>스킬 시스템</summary>
 
 ![SkillPopup](https://github.com/user-attachments/assets/da539d47-548a-47c4-b54c-10d205b70ad8)
 
 - **다양한 스킬 구현**
-  - 팔라딘: 방어력 증가, 회복, 방어막
-  - 드루이드: 자연의 힘, 치유, 번개
-  - 마법사: 화염 폭발, 얼음 화살, 번개
   - 스킬 선택 및 강화 시스템
   - 스킬 효과 파티클 시스템
 
-```csharp
-public class PaladinSkill : MonoBehaviour
-{
-    private void Update()
-    {
-        // 플레이어 주변을 도는 스킬 효과
-        _angle += _speed * Time.deltaTime;
-        float x = Mathf.Cos(_angle * Mathf.Deg2Rad) * _distance;
-        float z = -Mathf.Sin(_angle * Mathf.Deg2Rad) * _distance;
-        transform.position = player.transform.position + new Vector3(x, _yOffset, z);
-    }
-}
-```
 
-<br><br></details>
+</details>
 <details> <summary>상점 시스템</summary>
 
 ![Store](https://github.com/user-attachments/assets/76746564-9877-484e-b7ae-3f04102d1965)
 
 - **아이템 구매 및 강화**
   - 골드 기반 아이템 구매
-  - 아이템 강화 시스템
-  - 강화 확률 및 비용 관리
-  - 인벤토리 시스템
   - UI 기반 상점 인터페이스
 
-```csharp
-public class UpgradeStoreUI : MonoBehaviour
-{
-    public void OnUpgradeButton()
-    {
-        if (Managers.Game.Gold >= upgradeCost)
-        {
-            float successRate = GetSuccessRate();
-            if (Random.value <= successRate)
-            {
-                // 강화 성공
-                itemLevel++;
-                UpdateUI();
-            }
-            else
-            {
-                // 강화 실패
-                itemLevel = 0;
-            }
-        }
-    }
-}
-```
-
-<br><br></details>
+</details>
 <details><summary>캐릭터</summary><br>
 
 ![Character](https://github.com/user-attachments/assets/1b9d91e3-49bd-4ec5-a794-197b78a52e9f)
@@ -193,28 +92,6 @@ public class UpgradeStoreUI : MonoBehaviour
   - 스킬 사용 시스템
   - 데미지 계산 및 전투 로직
 
-```csharp
-public class PlayerController : MonoBehaviour
-{
-    private void UpdateTargetMonster()
-    {
-        // 가장 가까운 살아있는 몬스터를 타겟팅
-        monsters.Sort((a, b) => {
-            float distanceA = Vector3.Distance(transform.position, a.transform.position);
-            float distanceB = Vector3.Distance(transform.position, b.transform.position);
-            
-            if (a.GetComponent<MonsterController>().IsDead)
-                distanceA += 1000f;
-            if (b.GetComponent<MonsterController>().IsDead)
-                distanceB += 1000f;
-                
-            return distanceA.CompareTo(distanceB);
-        });
-        currentTarget = monsters[0];
-    }
-}
-```
-
 - **몬스터 시스템**
   - AI 기반 몬스터 행동
   - NavMesh 기반 추적
@@ -222,33 +99,6 @@ public class PlayerController : MonoBehaviour
   - 데미지 처리 및 사망 처리
   - 스폰 및 리스폰 시스템
 
-```csharp
-public class MonsterController : MonoBehaviour
-{
-    private void UpdateState()
-    {
-        switch (currentState)
-        {
-            case MonsterState.Trace:
-                // 플레이어 추적
-                agent.SetDestination(Managers.Player.transform.position);
-                break;
-            case MonsterState.Attack:
-                // 공격 범위 내에서 공격
-                if (Vector3.Distance(transform.position, Managers.Player.transform.position) <= attackRange)
-                {
-                    StartCoroutine(AttackRoutine());
-                }
-                break;
-            case MonsterState.Dead:
-                // 사망 처리
-                OnDead();
-                break;
-        }
-    }
-}
-```
-
-<br><br></details>
+</details>
 
 
